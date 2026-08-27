@@ -61,10 +61,10 @@
 ## Handoff
 
 - **Feature**: library-v1 / `.specs/features/library-v1`
-- **Phase / Task**: Phase 2 Search concluída (T6–T9). Aguardando confirmação para Phase 3 Persistence (T10–T17)
-- **Completed**: T1–T9 (Phase 1 Infra + Phase 2 Search)
+- **Phase / Task**: Phase 3 Persistence concluída (T10–T17). Aguardando confirmação para Phase 4 HTTP tracking (T18–T21)
+- **Completed**: T1–T17 (Phase 1 Infra + Phase 2 Search + Phase 3 Persistence)
 - **In-progress**: none
-- **Next step**: Perguntar se Bruno quer Phase 3 Persistence. Cadence: uma fase por vez
+- **Next step**: Perguntar se Bruno quer Phase 4 HTTP tracking. Cadence: uma fase por vez
 - **Blockers**: none
-- **Uncommitted files**: `.specs/STATE.md`, `.specs/features/library-v1/context.md`, `docs/**`, `AGENTS.md`, outros `.specs/**`
+- **Uncommitted files**: `.specs/STATE.md`
 - **Branch**: main

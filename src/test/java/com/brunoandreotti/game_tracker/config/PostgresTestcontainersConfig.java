@@ -1,6 +1,6 @@
 package com.brunoandreotti.game_tracker.config;
 
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 public final class PostgresTestcontainersConfig {
 
@@ -9,8 +9,8 @@ public final class PostgresTestcontainersConfig {
 	private PostgresTestcontainersConfig() {
 	}
 
-	public static PostgreSQLContainer<?> newContainer() {
-		return new PostgreSQLContainer<>(IMAGE);
+	public static PostgreSQLContainer newContainer() {
+		return new PostgreSQLContainer(IMAGE);
 	}
 
 }

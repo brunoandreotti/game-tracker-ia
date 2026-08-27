@@ -116,9 +116,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Production YAML has Postgres + `ddl-auto: none` + Flyway
-- [ ] No secrets committed; `RAWG_API_KEY` and DB password come from env
-- [ ] Gate check passes: `mvn -q package`
+- [x] Production YAML has Postgres + `ddl-auto: none` + Flyway
+- [x] No secrets committed; `RAWG_API_KEY` and DB password come from env
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

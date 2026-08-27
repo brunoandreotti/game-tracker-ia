@@ -1,3 +1,17 @@
 spring:
   application:
     name: game-tracker
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:game_tracker}
+    username: ${DB_USER:game_tracker}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    enabled: true
+
+rawg:
+  base-url: ${RAWG_BASE_URL:https://api.rawg.io/api}
+  api-key: ${RAWG_API_KEY}

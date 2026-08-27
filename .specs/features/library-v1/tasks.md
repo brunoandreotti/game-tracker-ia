@@ -357,9 +357,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Domain type matches the design
-- [ ] No Spring or JPA imports
-- [ ] Gate check passes: `mvn -q package`
+- [x] Domain type matches the design
+- [x] No Spring or JPA imports
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build
@@ -383,8 +383,8 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Port has no Spring Data types
-- [ ] Gate check passes: `mvn -q package`
+- [x] Port has no Spring Data types
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build
@@ -408,8 +408,8 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Port has no Spring Data types
-- [ ] Gate check passes: `mvn -q package`
+- [x] Port has no Spring Data types
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build
@@ -433,8 +433,8 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Entity lives only in `adapter.persistence`
-- [ ] Gate check passes: `mvn -q package`
+- [x] Entity lives only in `adapter.persistence`
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build
@@ -458,9 +458,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Session entity maps duration and `playedAt` date
-- [ ] Tracked game owns the collection with cascade delete
-- [ ] Gate check passes: `mvn -q package`
+- [x] Session entity maps duration and `playedAt` date
+- [x] Tracked game owns the collection with cascade delete
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build
@@ -484,11 +484,11 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Adapter can detect duplicate `rawgId` and load by id
-- [ ] Spock against Testcontainers covers unique `rawg_id` and find-by-id
-- [ ] Application code does not import Spring Data
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 2 tests pass (no silent deletions)
+- [x] Adapter can detect duplicate `rawgId` and load by id
+- [x] Spock against Testcontainers covers unique `rawg_id` and find-by-id
+- [x] Application code does not import Spring Data
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 2 tests pass (no silent deletions)
 
 **Tests**: integration
 **Gate**: full
@@ -512,10 +512,10 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Adapter can list ordered sessions and load by id scoped to a tracked game
-- [ ] Spock against Testcontainers covers order (`playedAt` desc, `id` desc) and cascade delete
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 2 tests pass (no silent deletions)
+- [x] Adapter can list ordered sessions and load by id scoped to a tracked game
+- [x] Spock against Testcontainers covers order (`playedAt` desc, `id` desc) and cascade delete
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 2 tests pass (no silent deletions)
 
 **Tests**: integration
 **Gate**: full

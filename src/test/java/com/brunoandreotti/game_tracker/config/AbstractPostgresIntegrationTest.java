@@ -9,6 +9,6 @@ public abstract class AbstractPostgresIntegrationTest {
 
 	@Container
 	@ServiceConnection
-	static PostgreSQLContainer<?> postgres = PostgresTestcontainersConfig.newContainer();
+	private static final PostgreSQLContainer<?> POSTGRES = PostgresTestcontainersConfig.newContainer();
 
 }

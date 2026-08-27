@@ -19,8 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class RawgGameCatalogAdapterTest extends AbstractRawgWireMockIntegrationTest {
 
+	private final GameCatalogPort gameCatalogPort;
+
 	@Autowired
-	GameCatalogPort gameCatalogPort;
+	RawgGameCatalogAdapterTest(GameCatalogPort gameCatalogPort) {
+		this.gameCatalogPort = gameCatalogPort;
+	}
 
 	@Test
 	void searchMapsRawgResultsToGameSummaries() {

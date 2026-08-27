@@ -17,10 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class GameSearchServiceImplTest {
 
 	@Mock
-	GameCatalogPort gameCatalogPort;
+	private GameCatalogPort gameCatalogPort;
 
 	@InjectMocks
-	GameSearchServiceImpl service;
+	private GameSearchServiceImpl service;
 
 	@Test
 	void returnsSummariesFromCatalogPort() {

@@ -18,11 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 class GameSearchControllerTest extends AbstractRawgMockMvcIntegrationTest {
 
-	@Autowired
-	MockMvc mockMvc;
+	private final MockMvc mockMvc;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	GameSearchControllerTest(MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+		this.mockMvc = mockMvc;
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	@Test
 	void getGamesSearchReturnsMappedGamesFromRawg() throws Exception {

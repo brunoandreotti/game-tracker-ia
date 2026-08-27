@@ -221,9 +221,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Port matches design: `search(String)`, `getByRawgId(long)`
-- [ ] Exceptions exist for 404 (missing RAWG id) and 502 (unavailable)
-- [ ] Gate check passes: `mvn -q package`
+- [x] Port matches design: `search(String)`, `getByRawgId(long)`
+- [x] Exceptions exist for 404 (missing RAWG id) and 502 (unavailable)
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

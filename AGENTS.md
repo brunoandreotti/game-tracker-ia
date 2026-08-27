@@ -1,0 +1,70 @@
+# Game Tracker
+
+Spring Boot backend scaffold. Product vision and planned stack live in [`docs/`](docs/README.md) ([product](docs/product.md), [stack](docs/stack.md), [open items](docs/open.md)). Implement only what is asked; do not invent beyond those docs.
+
+## Planning
+
+Planning is collaborative and stays open until Bruno asks to implement.
+
+- **Ask questions** throughout planning — product, API, stack, gaps in [`docs/open.md`](docs/open.md). Do not wait for a complete spec.
+- **Give opinions and suggestions** (trade-offs, defaults, what can wait). Bruno will bring ideas; help define what is still missing.
+- **Propose, then confirm.** Do not write undecided behavior into `docs/` as if it were decided.
+- When something is decided, update the relevant file under `docs/` and remove it from `docs/open.md`.
+- Do not start coding (Java, Docker, new dependencies) until explicitly asked to implement.
+
+## Stack
+
+- Java 21, Spring Boot 4.1.1, Maven Wrapper (`mvnw` / `mvnw.cmd`)
+- Web: `spring-boot-starter-webmvc`
+- Persistence planned: PostgreSQL driver is on the classpath; JPA/JDBC and datasource config are not added yet
+- Planned stack (Spock, Compose, Feign/gate, JPA): [`docs/stack.md`](docs/stack.md) — do not add those dependencies until implementing
+- Lombok is configured as an annotation processor
+- Package: `com.brunoandreotti.game_tracker`
+
+## Commands
+
+Prefer the Maven wrapper. On Windows use `mvnw.cmd`.
+
+```bash
+./mvnw test
+./mvnw spring-boot:run
+./mvnw -q package
+```
+
+## Layout
+
+```
+docs/                                            # product, stack, open items (planning until implemented)
+src/main/java/com/brunoandreotti/game_tracker/   # application code
+src/main/resources/application.yaml              # Spring config
+src/test/java/com/brunoandreotti/game_tracker/   # tests
+```
+
+Keep the root package as-is. Add feature packages under it (for example `game`, `config`) rather than flattening everything into the root.
+
+## Conventions
+
+- Match existing Spring Boot style: constructor injection, `@RestController` for HTTP, YAML for config.
+- Use Lombok where it reduces noise (`@RequiredArgsConstructor`, `@Getter`); do not mix it with manual boilerplate for the same members.
+- Do not add dependencies (JPA, security, validation, OpenAPI, etc.) unless the task needs them.
+- Prefer small, focused classes over large service/controller files.
+- Tests live next to the same package as production code. At minimum, keep `contextLoads` green; add focused tests for new behavior.
+- Configuration belongs in `application.yaml` (and profile-specific YAML when needed), not hardcoded in Java.
+
+## Documentation
+
+Always use the Context7 MCP when looking up library, framework, or API docs. Do not rely on training data or generic web search for that.
+Always use the Context7 MCP when I need code generation, setup or configuration step to be sure that the implementation is right.
+
+1. Call `resolve-library-id` with the library name and the full question as `query`.
+2. Pick the best match (exact name, official source, version-specific ID when a version is mentioned — e.g. Spring Boot 4.1.1, Java 21).
+3. Call `query-docs` with that `libraryId` and the specific question.
+4. Answer from the fetched docs; cite the library version when relevant.
+
+Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spock, Spring Cloud OpenFeign, and any other dependency or API this project uses.
+
+## Do not
+
+- Invent domain entities, APIs, or product behavior beyond [`docs/product.md`](docs/product.md).
+- Commit, push, or change git config unless explicitly asked.
+- Rewrite the scaffold, rename the package, or add unrelated tooling.

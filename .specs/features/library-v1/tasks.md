@@ -193,9 +193,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Migration creates both tables, unique `rawg_id`, FK `ON DELETE CASCADE`
-- [ ] `mvn test` applies the migration on Testcontainers Postgres
-- [ ] Gate check passes: `mvn -q package`
+- [x] Migration creates both tables, unique `rawg_id`, FK `ON DELETE CASCADE`
+- [x] `mvn test` applies the migration on Testcontainers Postgres
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

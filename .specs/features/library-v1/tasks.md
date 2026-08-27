@@ -142,8 +142,8 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `Dockerfile` exists at repo root and targets Java 21
-- [ ] Gate check passes: `mvn -q package`
+- [x] `Dockerfile` exists at repo root and targets Java 21
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

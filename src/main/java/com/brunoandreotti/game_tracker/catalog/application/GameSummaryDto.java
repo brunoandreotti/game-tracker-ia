@@ -1,6 +1,6 @@
 package com.brunoandreotti.game_tracker.catalog.application;
 
-public record GameSummary(
+public record GameSummaryDto(
 		long rawgId,
 		String name,
 		Integer year,

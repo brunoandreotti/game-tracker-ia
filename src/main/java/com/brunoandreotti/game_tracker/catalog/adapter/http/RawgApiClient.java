@@ -1,16 +1,17 @@
 package com.brunoandreotti.game_tracker.catalog.adapter.http;
 
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.service.annotation.GetExchange;
-import org.springframework.web.service.annotation.HttpExchange;
 
-@HttpExchange(accept = "application/json")
+@FeignClient(name = "rawg", url = "${rawg.base-url}")
 public interface RawgApiClient {
 
-	@GetExchange("/games")
-	RawgSearchResponse searchGames(@RequestParam("search") String search, @RequestParam("key") String apiKey);
+	@GetMapping("/games")
+	RawgSearchResponseDto searchGames(@RequestParam("search") String search, @RequestParam("key") String apiKey);
 
-	@GetExchange("/games/{id}")
-	RawgGameResponse getGame(@PathVariable("id") long id, @RequestParam("key") String apiKey);
+	@GetMapping("/games/{id}")
+	RawgGameDto getGame(@PathVariable("id") long id, @RequestParam("key") String apiKey);
+
 }

@@ -1,23 +1,11 @@
 # Ainda em aberto
 
-Itens para o agente **perguntar e sugerir** durante o planejamento. Não tratar como decidido até confirmar e mover para [product.md](product.md) ou [stack.md](stack.md).
+Nada bloqueia o v1. Brief em [product.md](product.md) e [stack.md](stack.md). Contrato executável em [.specs/features/library-v1](../.specs/features/library-v1/spec.md). Rotas de acompanhamento: `/tracked-games`. Arquitetura: hexagonal prática (AD-005).
 
-## Produto / API
+## Na implementação (não precisa cravar agora)
 
-- Contrato JSON (bodies de search, library, sessions; campos de horas totais).
-- Erros HTTP: 404 (entrada/sessão inexistente), 409 (jogo já na biblioteca), 400 (nota fora de 1–10, minutos ≤ 0).
-- `playedAt` obrigatório ou default “agora”? Fuso?
-- Sessão tem nota/comentário ou só duração + data?
-- `GET /library` filtra por status?
-
-## Stack
-
-- Flyway vs Hibernate `ddl-auto` no v1.
-- `spring-boot-starter-validation` no v1, sim ou não.
-- Testcontainers nos testes de persistência agora ou depois.
-- Layout Compose: um `compose.yaml` na raiz vs pasta `docker/`.
-- Feign: BOM Cloud estável para Boot 4.1.1 (gate); senão `@HttpExchange`.
+_(nenhum item no momento)_
 
 ## Processo
 
-- O que mais você quiser puxar para o v1 ou deixar explícito como “depois”.
+- Código só quando você pedir para implementar. Ordem: infra → busca → jogos acompanhados → sessões (`.specs/features/library-v1/tasks.md`). Mais de um batch: na Execute, oferecer sub-agents, não disparar sozinho.

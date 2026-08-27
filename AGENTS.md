@@ -14,21 +14,21 @@ Planning is collaborative and stays open until Bruno asks to implement.
 
 ## Stack
 
-- Java 21, Spring Boot 4.1.1, Maven Wrapper (`mvnw` / `mvnw.cmd`)
+- Java 21, Spring Boot 4.1.1, Maven 3.9+ (`mvn` no PATH; wrapper `mvnw` / `mvnw.cmd` ainda no repo)
 - Web: `spring-boot-starter-webmvc`
 - Persistence planned: PostgreSQL driver is on the classpath; JPA/JDBC and datasource config are not added yet
-- Planned stack (Spock, Compose, Feign/gate, JPA): [`docs/stack.md`](docs/stack.md) — do not add those dependencies until implementing
+- Planned stack (Compose, Feign, JPA, Testcontainers, WireMock): [`docs/stack.md`](docs/stack.md) — do not add those dependencies until implementing
 - Lombok is configured as an annotation processor
 - Package: `com.brunoandreotti.game_tracker`
 
 ## Commands
 
-Prefer the Maven wrapper. On Windows use `mvnw.cmd`.
+Use `mvn` (Maven 3.9+ and Java 21 on the PATH).
 
 ```bash
-./mvnw test
-./mvnw spring-boot:run
-./mvnw -q package
+mvn test
+mvn spring-boot:run
+mvn -q package
 ```
 
 ## Layout
@@ -40,7 +40,7 @@ src/main/resources/application.yaml              # Spring config
 src/test/java/com/brunoandreotti/game_tracker/   # tests
 ```
 
-Keep the root package as-is. Add feature packages under it (for example `game`, `config`) rather than flattening everything into the root.
+Keep the root package as-is. Feature packages: `catalog` (RAWG/busca), `tracking` (jogos acompanhados e sessões), `config`. Camadas internas: `domain`, `application`, `adapter`. O miolo não importa Spring nem JPA.
 
 ## Conventions
 
@@ -50,6 +50,18 @@ Keep the root package as-is. Add feature packages under it (for example `game`, 
 - Prefer small, focused classes over large service/controller files.
 - Tests live next to the same package as production code. At minimum, keep `contextLoads` green; add focused tests for new behavior.
 - Configuration belongs in `application.yaml` (and profile-specific YAML when needed), not hardcoded in Java.
+- **Class suffixes** (every class must indicate its role):
+  - `Controller` — REST adapter
+  - `Service` / `ServiceImpl` — application use case (interface + implementation)
+  - `Port` — outbound interface (hexagonal)
+  - `Adapter` — port implementation (e.g. RAWG, JPA)
+  - `Repository` / `RepositoryImpl` — persistence port + JPA adapter
+  - `Client` — HTTP/Feign client
+  - `Dto` — records/DTOs between layers or external APIs
+  - `Response` — HTTP response body (web layer)
+  - `Entity` — JPA entity
+  - `Exception` / `Handler` — errors
+  - `Config` / `Properties` — Spring configuration
 
 ## Documentation
 
@@ -61,7 +73,7 @@ Always use the Context7 MCP when I need code generation, setup or configuration 
 3. Call `query-docs` with that `libraryId` and the specific question.
 4. Answer from the fetched docs; cite the library version when relevant.
 
-Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spock, Spring Cloud OpenFeign, and any other dependency or API this project uses.
+Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spring Cloud OpenFeign, and any other dependency or API this project uses.
 
 ## Do not
 

@@ -1,19 +1,10 @@
 package com.brunoandreotti.game_tracker;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
-@Testcontainers(disabledWithoutDocker = true)
-class GameTrackerApplicationTests {
+import com.brunoandreotti.game_tracker.config.AbstractPostgresIntegrationTest;
 
-	@Container
-	@ServiceConnection
-	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+class GameTrackerApplicationTests extends AbstractPostgresIntegrationTest {
 
 	@Test
 	void contextLoads() {

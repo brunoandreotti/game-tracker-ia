@@ -1,35 +1,41 @@
 # Stack (planejada)
 
-Produção: **Java 21**, Spring Boot **4.1.1** (parent atual do `pom.xml`). Scaffold hoje: Web MVC, driver PostgreSQL (sem JPA), Lombok.
+Produção: **Java 21**, Spring Boot **4.1.1** (parent atual do `pom.xml`), Spring Cloud **2025.1.x (Oakwood)** para OpenFeign.
 
 Nada disto está no código ainda. Versões finas se cravam na implementação, com Context7.
 
-## Testes: Spock + Groovy
+## Testes: JUnit 5 + Mockito
 
-- Specs em `src/test/groovy` (mesmo pacote da feature). Produção continua Java.
-- Spock 2.4 no JUnit Platform; `spock-spring` (`@SpringBean` / `@SpringSpy`) só quando o spec subir Spring.
-- Context7 (`/spockframework/spock`): 2.4 e módulo Spring ok. **Não** veio Maven + Groovy 4 + Java 21 — gate na implementação (`spock-core` / `spock-spring`, classifier Groovy 4).
-- Preferência: regras de domínio **sem** contexto Spring; API/JPA só no slice que precisar.
+- Testes em `src/test/java` (mesmo pacote da feature).
+- Unitários: JUnit 5 + Mockito, sem Spring.
+- Integração/componente: `@SpringBootTest`, Testcontainers, WireMock — bases em `src/test/java/.../config/`.
+
+## Testes: três níveis
+
+- **Unitário:** `GameSearchServiceImpl` / `TrackedGameServiceImpl` / `SessionServiceImpl` sem Spring. Sem banco e sem HTTP.
+- **Integração:** adapter JPA no Postgres (Testcontainers). Cliente do RAWG contra WireMock. Sem H2.
+- **Componente:** `@SpringBootTest`. Controller, serviço e repositório reais. Postgres no Testcontainers. Só o RAWG vira WireMock. Não fakeia serviço nem repositório. Sem `@WebMvcTest` para o contrato da API.
+- `mvn test` precisa de Docker. Compose continua só para `spring-boot:run`.
+- Versões finas na implementação, com Context7.
 
 ## Docker Compose
 
-- Compose com **Postgres + aplicação**.
-- No dia a dia: `mvnw spring-boot:run` contra o Postgres do Compose (ciclo mais curto que rebuild de imagem).
+- Um `compose.yaml` **na raiz** com **Postgres + aplicação**.
+- No dia a dia: `mvn spring-boot:run` contra o Postgres do Compose (ciclo mais curto que rebuild de imagem).
 - RAWG **não** entra no Compose (API externa). Chave só no env (`RAWG_API_KEY` ou equivalente).
-- Testcontainers para `mvn test`: evolução, não obrigação do v1.
 
-## Cliente HTTP: Feign, com gate
+## Cliente HTTP: Feign (OpenFeign)
 
-- Preferência: OpenFeign (`@EnableFeignClients`, `@FeignClient`) para search + getById do RAWG.
-- Isolar atrás de uma porta nossa (`GameCatalog`); o resto da app não conhece Feign/RAWG.
-- Context7 (`/spring-cloud/spring-cloud-openfeign`, `main`): BOM `spring-cloud-openfeign-dependencies` **5.0.3-SNAPSHOT**. **Não** há matriz clara Boot **4.1.1** ↔ release train.
-- **Gate:** BOM Cloud estável alinhado ao 4.1.1. Se não houver, fallback nativo do Boot **4.0.0+**: `@HttpExchange` / `@GetExchange`, `@ImportHttpServices`, `spring.http.serviceclient.*.base-url` (docs `/spring-projects/spring-boot/v4.1.0`). Sem Spring Cloud.
+- **OpenFeign** (`@EnableFeignClients`, `@FeignClient`) para search + getById do RAWG.
+- Isolar atrás da porta `GameCatalogPort`; só o adapter do catálogo conhece Feign/RAWG. O controller de busca chama `GameSearchService`, não a porta.
+- **Spring Boot 4.1.1** + **Spring Cloud 2025.1.x (Oakwood)** BOM `spring-cloud-dependencies` — matriz oficial suporta Boot 4.1.x (desde 2025.1.2). Sem downgrade.
+- Config: `rawg.base-url`, `rawg.api-key`; timeouts em `spring.cloud.openfeign.client.config.rawg`.
 
 ## Persistência
 
 - **Spring Data JPA** (`spring-boot-starter-data-jpa`) — confirmado no Boot 4.x via Context7. Driver Postgres já está no `pom`.
-- Schema: **Flyway** sugerido (Compose como jeito oficial de subir o banco); Hibernate `ddl-auto` só como atalho local, se escolhido depois.
-- Validação: `spring-boot-starter-validation` nos DTOs (nota 1–10, `durationMinutes` > 0) — sugerido, ainda não decidido.
+- Schema: **Flyway** no v1. Sem Hibernate `ddl-auto` no jeito oficial (Compose + migrações).
+- Validação: **`spring-boot-starter-validation`** nos DTOs (`q` não vazio, nota 1–10, `durationMinutes` > 0).
 
 ## Fora até alguém pedir
 

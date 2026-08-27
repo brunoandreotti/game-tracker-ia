@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GameSearchServiceImpl implements GameSearchService {
 
-	private final GameCatalog gameCatalog;
+	private final GameCatalogPort gameCatalogPort;
 
 	@Override
-	public List<GameSummary> search(String query) {
-		return gameCatalog.search(query);
+	public List<GameSummaryDto> search(String query) {
+		return gameCatalogPort.search(query);
 	}
+
 }

@@ -167,9 +167,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `compose.yaml` defines Postgres + app
-- [ ] App service passes DB env; RAWG key via env only
-- [ ] Gate check passes: `mvn -q package`
+- [x] `compose.yaml` defines Postgres + app
+- [x] App service passes DB env; RAWG key via env only
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

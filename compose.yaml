@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: game_tracker
+      POSTGRES_USER: game_tracker
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-game_tracker}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U game_tracker -d game_tracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: game_tracker
+      DB_USER: game_tracker
+      DB_PASSWORD: ${DB_PASSWORD:-game_tracker}
+      RAWG_API_KEY: ${RAWG_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy

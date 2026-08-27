@@ -331,9 +331,9 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Domain type has id, rawgId, name, year, coverUrl, status, rating
-- [ ] No Spring or JPA imports in `tracking.domain`
-- [ ] Gate check passes: `mvn -q package`
+- [x] Domain type has id, rawgId, name, year, coverUrl, status, rating
+- [x] No Spring or JPA imports in `tracking.domain`
+- [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
 **Gate**: build

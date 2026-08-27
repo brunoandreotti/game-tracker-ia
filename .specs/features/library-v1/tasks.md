@@ -274,10 +274,10 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `GameSearchServiceImpl` implements the interface and only depends on `GameCatalog`
-- [ ] Spock specs (no Spring) cover returning summaries from the port and empty list; no persistence call exists on the service
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 2 tests pass (no silent deletions)
+- [x] `GameSearchServiceImpl` implements the interface and only depends on `GameCatalog`
+- [x] Spock specs (no Spring) cover returning summaries from the port and empty list; no persistence call exists on the service
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 2 tests pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: quick

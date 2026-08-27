@@ -11,7 +11,12 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+  http:
+    serviceclient:
+      rawg:
+        base-url: ${RAWG_BASE_URL:https://api.rawg.io/api}
+        connect-timeout: 5s
+        read-timeout: 5s
 
 rawg:
-  base-url: ${RAWG_BASE_URL:https://api.rawg.io/api}
   api-key: ${RAWG_API_KEY}

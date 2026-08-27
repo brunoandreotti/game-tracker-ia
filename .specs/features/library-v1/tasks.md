@@ -247,10 +247,10 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Adapter is the only type that talks HTTP to RAWG
-- [ ] WireMock specs cover mapping, 5xx/timeout → `CatalogUnavailableException`, 404 → `GameNotFoundException`, null year/cover
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 4 tests pass (no silent deletions)
+- [x] Adapter is the only type that talks HTTP to RAWG
+- [x] WireMock specs cover mapping, 5xx/timeout → `CatalogUnavailableException`, 404 → `GameNotFoundException`, null year/cover
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 4 tests pass (no silent deletions)
 
 **Tests**: integration
 **Gate**: full

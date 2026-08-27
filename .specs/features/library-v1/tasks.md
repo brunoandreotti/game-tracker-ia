@@ -301,11 +301,11 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `@SpringBootTest` specs (Postgres + WireMock) assert LIB-01, LIB-02 (search does not persist), LIB-03 (blank `q` → 400), LIB-04 (unavailable → 502), LIB-05 (empty list → 200 `[]`)
-- [ ] Controller calls `GameSearchService`; catalog adapter is real; only RAWG HTTP is WireMock
-- [ ] Error JSON has `status`, `error`, `message`
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 5 tests pass (no silent deletions)
+- [x] `@SpringBootTest` specs (Postgres + WireMock) assert LIB-01, LIB-02 (search does not persist), LIB-03 (blank `q` → 400), LIB-04 (unavailable → 502), LIB-05 (empty list → 200 `[]`)
+- [x] Controller calls `GameSearchService`; catalog adapter is real; only RAWG HTTP is WireMock
+- [x] Error JSON has `status`, `error`, `message`
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 5 tests pass (no silent deletions)
 
 **Tests**: component
 **Gate**: full

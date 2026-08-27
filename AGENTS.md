@@ -37,7 +37,8 @@ mvn -q package
 docs/                                            # product, stack, open items (planning until implemented)
 src/main/java/com/brunoandreotti/game_tracker/   # application code
 src/main/resources/application.yaml              # Spring config
-src/test/java/com/brunoandreotti/game_tracker/   # tests
+src/test/groovy/com/brunoandreotti/game_tracker/ # Spock specs (`*Spec.groovy`)
+src/test/java/com/brunoandreotti/game_tracker/   # JUnit (`contextLoads`) and shared test config
 ```
 
 Keep the root package as-is. Feature packages: `catalog` (RAWG/busca), `tracking` (jogos acompanhados e sessões), `config`. Camadas internas: `domain`, `application`, `adapter`. O miolo não importa Spring nem JPA.
@@ -48,7 +49,11 @@ Keep the root package as-is. Feature packages: `catalog` (RAWG/busca), `tracking
 - Use Lombok where it reduces noise (`@RequiredArgsConstructor`, `@Getter`); do not mix it with manual boilerplate for the same members.
 - Do not add dependencies (JPA, security, validation, OpenAPI, etc.) unless the task needs them.
 - Prefer small, focused classes over large service/controller files.
-- Tests live next to the same package as production code. At minimum, keep `contextLoads` green; add focused tests for new behavior.
+- Tests live next to the same package as production code. Feature tests are Spock `*Spec.groovy` in `src/test/groovy`. Keep `contextLoads` green in JUnit. Add focused specs for new behavior.
+- **Spock feature methods** (English, every new or changed spec):
+  - `def` name: `Given ..., When ..., Then ...` (capital G/W/T, comma-separated).
+  - Blocks: `given:`, `when:`, `then:` each with an English description string. Prefer `when`/`then` over `expect`.
+  - Do not use sentence-style names without Given/When/Then. Match existing specs.
 - Configuration belongs in `application.yaml` (and profile-specific YAML when needed), not hardcoded in Java.
 - **Class suffixes** (every class must indicate its role):
   - `Controller` — REST adapter
@@ -73,7 +78,7 @@ Always use the Context7 MCP when I need code generation, setup or configuration 
 3. Call `query-docs` with that `libraryId` and the specific question.
 4. Answer from the fetched docs; cite the library version when relevant.
 
-Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spring Cloud OpenFeign, and any other dependency or API this project uses.
+Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spock, Spring Cloud OpenFeign, and any other dependency or API this project uses.
 
 ## Do not
 

@@ -1,0 +1,39 @@
+---
+description: Spock spec naming — English Given/When/Then on feature methods and blocks
+globs: "**/*Spec.groovy"
+alwaysApply: false
+---
+
+# Spock specs
+
+Write feature tests as Spock `*Spec.groovy` in `src/test/groovy` (same package as production). English only.
+
+## Feature method name
+
+`def` must be `Given ..., When ..., Then ...` (capital G/W/T, comma-separated). Do not use a plain sentence.
+
+```groovy
+// BAD
+def "returns summaries from the catalog port"() { ... }
+
+// GOOD
+def "Given the catalog port returns a Zelda summary, When the service searches for zelda, Then the summaries are returned unchanged"() { ... }
+```
+
+## Blocks
+
+Use `given:`, `when:`, `then:` with an English description on each. Prefer `when`/`then` over `expect`.
+
+```groovy
+given: "the catalog port will return a Zelda summary"
+def summaries = [new GameSummaryDto(123L, "Zelda", 2017, "https://cover")]
+
+when: "the service searches for zelda"
+def results = service.search("zelda")
+
+then: "the summaries from the catalog are returned unchanged"
+1 * gameCatalogPort.search("zelda") >> summaries
+results == summaries
+```
+
+`contextLoads` stays JUnit. Do not invent extra test layers beyond the spec.

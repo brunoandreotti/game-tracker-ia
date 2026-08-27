@@ -4,11 +4,12 @@ Produção: **Java 21**, Spring Boot **4.1.1** (parent atual do `pom.xml`), Spri
 
 Nada disto está no código ainda. Versões finas se cravam na implementação, com Context7.
 
-## Testes: JUnit 5 + Mockito
+## Testes: Spock 2.4
 
-- Testes em `src/test/java` (mesmo pacote da feature).
-- Unitários: JUnit 5 + Mockito, sem Spring.
-- Integração/componente: `@SpringBootTest`, Testcontainers, WireMock — bases em `src/test/java/.../config/`.
+- Feature tests in `src/test/groovy` (`*Spec.groovy`, same package as production). `contextLoads` stays JUnit in `src/test/java`.
+- Feature method names: English `Given ..., When ..., Then ...`. Blocks `given:` / `when:` / `then:` each with an English description. Prefer `when`/`then` over `expect`.
+- Unitários: Spock, sem Spring.
+- Integração/componente: Spock + `@SpringBootTest`, Testcontainers, WireMock — bases em `src/test/java/.../config/` e `src/test/groovy/.../config/`.
 
 ## Testes: três níveis
 

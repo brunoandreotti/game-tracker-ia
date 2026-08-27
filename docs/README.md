@@ -5,7 +5,7 @@ Diário pessoal de jogos eletrônicos. O código da API ainda não existe; estes
 | Arquivo | Conteúdo |
 |---|---|
 | [product.md](product.md) | Visão, recorte do v1, contrato JSON, erros, fora de escopo |
-| [stack.md](stack.md) | JUnit, Compose, Flyway, Validation, Feign, JPA, Testcontainers, WireMock |
+| [stack.md](stack.md) | Spock, Compose, Flyway, Validation, Feign, JPA, Testcontainers, WireMock |
 | [open.md](open.md) | O que ainda falta definir — v1 não tem bloqueio de produto/stack |
 | [../.specs/features/library-v1](../.specs/features/library-v1/spec.md) | Contrato executável do v1 (EARS, design, tasks). Brief humano continua nestes `docs/` |
 

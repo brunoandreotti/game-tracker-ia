@@ -9,6 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@ContextConfiguration(initializers = RawgWireMockTestConfig.Initializer.class)
+@ContextConfiguration(initializers = RawgWireMockInitializer.class)
 public @interface WithRawgWireMock {
 }

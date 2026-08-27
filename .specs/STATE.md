@@ -50,6 +50,14 @@
 - **Date**: 2026-08-27
 - **Status**: active
 
+### AD-007
+- **Decision**: Feature tests are Spock `*Spec.groovy`. Method names and blocks use English Given / When / Then.
+- **Reason**: Specs read as scenarios. Agents keep the same shape on later work.
+- **Trade-off**: Longer method names than JUnit-style sentences.
+- **Scope**: `src/test/groovy/**/*Spec.groovy`
+- **Date**: 2026-08-27
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: library-v1 / `.specs/features/library-v1`

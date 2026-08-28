@@ -2,7 +2,7 @@
 
 **Spec**: `.specs/features/ui-shadcn/spec.md`
 **Design**: `.specs/features/ui-shadcn/design.md`
-**Status**: In Progress
+**Status**: Done
 
 ---
 
@@ -172,11 +172,11 @@ T4 -> T5
 
 **Done when**:
 
-- [ ] No `window.confirm` on detail deletes
-- [ ] Cancel → no DELETE (tested)
-- [ ] Confirm session delete → DELETE + refresh (tested)
-- [ ] Confirm game delete → DELETE + navigate `/` (tested)
-- [ ] Gate: `npm test` and `npm run build` green
+- [x] No `window.confirm` on detail deletes
+- [x] Cancel → no DELETE (tested)
+- [x] Confirm session delete → DELETE + refresh (tested)
+- [x] Confirm game delete → DELETE + navigate `/` (tested)
+- [x] Gate: `npm test` and `npm run build` green
 
 **Tests**: unit
 **Gate**: full

@@ -12,6 +12,16 @@ import {
 } from '../api/gamesApi'
 import type { PlayStatus, SessionDto, TrackedGameDto } from '../api/types'
 import { CoverImage, ErrorMessage, LoadingMessage } from '../components/Feedback'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../components/ui/alert-dialog'
 import { Button } from '../components/ui/button'
 import {
   Card,
@@ -46,6 +56,8 @@ export function TrackedGameDetailPage() {
   const [durationMinutes, setDurationMinutes] = useState('')
   const [playedAt, setPlayedAt] = useState('')
   const [sessionValidationError, setSessionValidationError] = useState<string | null>(null)
+  const [sessionToDelete, setSessionToDelete] = useState<number | null>(null)
+  const [gameDeleteOpen, setGameDeleteOpen] = useState(false)
 
   useEffect(() => {
     if (!id || Number.isNaN(gameId)) {
@@ -175,11 +187,13 @@ export function TrackedGameDetailPage() {
     }
   }
 
-  async function handleDeleteSession(sessionId: number) {
-    if (!window.confirm('Remover esta sessão?')) {
+  async function confirmDeleteSession() {
+    if (sessionToDelete === null) {
       return
     }
 
+    const sessionId = sessionToDelete
+    setSessionToDelete(null)
     setMutationError(null)
 
     try {
@@ -191,11 +205,8 @@ export function TrackedGameDetailPage() {
     }
   }
 
-  async function handleDeleteGame() {
-    if (!window.confirm('Remover este jogo da sua lista?')) {
-      return
-    }
-
+  async function confirmDeleteGame() {
+    setGameDeleteOpen(false)
     setMutationError(null)
 
     try {
@@ -371,7 +382,7 @@ export function TrackedGameDetailPage() {
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => void handleDeleteSession(session.id)}
+                    onClick={() => setSessionToDelete(session.id)}
                   >
                     Remover
                   </Button>
@@ -383,10 +394,51 @@ export function TrackedGameDetailPage() {
       </Card>
 
       <div className="detail-danger">
-        <Button type="button" variant="destructive" onClick={() => void handleDeleteGame()}>
+        <Button type="button" variant="destructive" onClick={() => setGameDeleteOpen(true)}>
           Remover jogo
         </Button>
       </div>
+
+      <AlertDialog
+        open={sessionToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSessionToDelete(null)
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover esta sessão?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação remove o registro de tempo. O total de minutos será atualizado.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={() => void confirmDeleteSession()}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={gameDeleteOpen} onOpenChange={setGameDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover este jogo da sua lista?</AlertDialogTitle>
+            <AlertDialogDescription>
+              O acompanhamento e as sessões deste jogo serão removidos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={() => void confirmDeleteGame()}>
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   )
 }

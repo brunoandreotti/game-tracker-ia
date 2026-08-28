@@ -180,7 +180,6 @@ describe('TrackedGameDetailPage', () => {
 
   it('Given confirm declined, When the user clicks Remover on a session, Then deleteSession is not called', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false)
     vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
     vi.mocked(gamesApi.listSessions).mockResolvedValue([
       { id: 10, durationMinutes: 30, playedAt: '2024-06-01' },
@@ -194,14 +193,19 @@ describe('TrackedGameDetailPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Remover' }))
 
-    expect(confirmSpy).toHaveBeenCalledWith('Remover esta sessão?')
+    expect(await screen.findByRole('alertdialog')).toBeInTheDocument()
+    expect(screen.getByText('Remover esta sessão?')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+    })
     expect(gamesApi.deleteSession).not.toHaveBeenCalled()
-    confirmSpy.mockRestore()
   })
 
   it('Given confirm accepted, When the user clicks Remover on a session, Then deleteSession is called and sessions and total refresh', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
     vi.mocked(gamesApi.getTrackedGame)
       .mockResolvedValueOnce({ ...trackedGame, totalMinutes: 30 })
       .mockResolvedValueOnce({ ...trackedGame, totalMinutes: 0 })
@@ -218,18 +222,17 @@ describe('TrackedGameDetailPage', () => {
     })
 
     await user.click(screen.getByRole('button', { name: 'Remover' }))
+    await user.click(await screen.findByRole('button', { name: 'Confirmar' }))
 
     await waitFor(() => {
       expect(gamesApi.deleteSession).toHaveBeenCalledWith(1, 10)
       expect(screen.getByText('Nenhuma sessão registrada.')).toBeInTheDocument()
       expect(screen.getByText(/2017 · Jogando · Sem nota · 0 min/)).toBeInTheDocument()
     })
-    confirmSpy.mockRestore()
   })
 
   it('Given confirm accepted, When the user removes the game, Then deleteTrackedGame is called and navigates home', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
     vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
     vi.mocked(gamesApi.listSessions).mockResolvedValue([])
     vi.mocked(gamesApi.deleteTrackedGame).mockResolvedValue(undefined)
@@ -241,13 +244,33 @@ describe('TrackedGameDetailPage', () => {
     })
 
     await user.click(screen.getByRole('button', { name: 'Remover jogo' }))
+    expect(await screen.findByText('Remover este jogo da sua lista?')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Confirmar' }))
 
     await waitFor(() => {
-      expect(confirmSpy).toHaveBeenCalledWith('Remover este jogo da sua lista?')
       expect(gamesApi.deleteTrackedGame).toHaveBeenCalledWith(1)
       expect(navigateMock).toHaveBeenCalledWith('/')
     })
-    confirmSpy.mockRestore()
+  })
+
+  it('Given game delete dialog open, When the user cancels, Then deleteTrackedGame is not called', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Remover jogo' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Remover jogo' }))
+    await user.click(await screen.findByRole('button', { name: 'Cancelar' }))
+
+    await waitFor(() => {
+      expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+    })
+    expect(gamesApi.deleteTrackedGame).not.toHaveBeenCalled()
   })
 
   it('Given patchTrackedGame fails, When the user changes status, Then error is shown and game name remains', async () => {

@@ -222,12 +222,12 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] All methods from design `gamesApi` exist
-- [ ] `createTrackedGame` sends only `{ rawgId }`
-- [ ] DELETE helpers tolerate empty 204 body
-- [ ] Unit tests with mocked fetch cover search query params and one mutate path
-- [ ] Gate check passes: `cd frontend && npm test`
-- [ ] Test count: prior tests + new ones pass (no silent deletions)
+- [x] All methods from design `gamesApi` exist
+- [x] `createTrackedGame` sends only `{ rawgId }`
+- [x] DELETE helpers tolerate empty 204 body
+- [x] Unit tests with mocked fetch cover search query params and one mutate path
+- [x] Gate check passes: `cd frontend && npm test`
+- [x] Test count: prior tests + new ones pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: quick

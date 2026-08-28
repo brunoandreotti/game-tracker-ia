@@ -209,7 +209,7 @@ T20 -> T21
 ### T6: Define GameCatalog port and catalog exceptions
 
 **What**: `GameCatalog` with nested `GameSummary` and exceptions `GameNotFoundException` / `CatalogUnavailableException`. Methods `search` and `getByRawgId`.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/catalog/application/GameCatalog.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/client/GameCatalogPort.java`
 **Depends on**: T1
 **Reuses**: Package layout from `AGENTS.md` (`catalog` under the root package)
 **Requirement**: LIB-01
@@ -235,7 +235,7 @@ T20 -> T21
 ### T7: Implement RAWG adapter behind GameCatalog
 
 **What**: HTTP client (Feign if BOM gate passes, else `@HttpExchange` group `rawg`) plus `RawgGameCatalog` implementing `GameCatalog`. Map RAWG JSON to `GameSummary`. Timeout/5xx → `CatalogUnavailableException`. Missing id → `GameNotFoundException`. Null year/cover allowed. Specs use WireMock, not a mock of the HTTP interface.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/catalog/adapter/http/RawgGameCatalog.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/client/RawgGameCatalogAdapter.java`
 **Depends on**: T6
 **Reuses**: AD-001; AD-003; Boot 4.1.0 HTTP services or OpenFeign `@FeignClient`; `application.yaml` RAWG properties from T2
 **Requirement**: LIB-04
@@ -262,7 +262,7 @@ T20 -> T21
 ### T8: Add GameSearchService and implementation
 
 **What**: Interface `GameSearchService` and class `GameSearchServiceImpl` that delegates to `GameCatalog`. Does not persist. Controller must not call `GameCatalog`.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/catalog/application/GameSearchService.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/service/GameSearchService.java`
 **Depends on**: T6
 **Reuses**: T6 `GameCatalog`; in-memory fake in Spock (no Spring)
 **Requirement**: LIB-01
@@ -289,7 +289,7 @@ T20 -> T21
 ### T9: Expose GET /games/search and API error body
 
 **What**: `GameSearchController` for `GET /games/search?q=`, Bean Validation `@NotBlank` on `q`, JSON array `{ rawgId, name, year, coverUrl }`. Inject `GameSearchService`. `ApiExceptionHandler` + error record `{ status, error, message }` for 400/404/409/502.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/catalog/adapter/web/GameSearchController.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/controller/GameSearchController.java`
 **Depends on**: T5, T7, T8
 **Reuses**: `@RestController`, constructor injection; handler lives in `config` (created in this task)
 **Requirement**: LIB-01
@@ -319,7 +319,7 @@ T20 -> T21
 ### T10: Add TrackedGame domain and PlayStatus
 
 **What**: `TrackedGame` (no JPA) and enum `PlayStatus` (`WANT_TO_PLAY`, `PLAYING`, `COMPLETED`, `DROPPED`). Domain exceptions for not found and duplicate `rawgId`.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/domain/TrackedGame.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/model/TrackedGame.java`
 **Depends on**: T5
 **Reuses**: Lombok `@Getter` if it reduces noise
 **Requirement**: LIB-06
@@ -332,7 +332,7 @@ T20 -> T21
 **Done when**:
 
 - [x] Domain type has id, rawgId, name, year, coverUrl, status, rating
-- [x] No Spring or JPA imports in `tracking.domain`
+- [x] No Spring or JPA imports in `model`
 - [x] Gate check passes: `mvn -q package`
 
 **Tests**: none
@@ -345,9 +345,9 @@ T20 -> T21
 ### T11: Add PlaySession domain
 
 **What**: `PlaySession` domain type with id, trackedGameId, durationMinutes, playedAt (`LocalDate`).
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/domain/PlaySession.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/model/PlaySession.java`
 **Depends on**: T10
-**Reuses**: T10 package `tracking.domain`
+**Reuses**: T10 package `model`
 **Requirement**: LIB-27
 
 **Tools**:
@@ -371,7 +371,7 @@ T20 -> T21
 ### T12: Add TrackedGameRepository port
 
 **What**: Interface `TrackedGameRepository` in application: save, findById, findAllOrderByIdAsc, existsByRawgId, deleteById. Uses domain `TrackedGame`, not JPA entities.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/application/TrackedGameRepository.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/repository/TrackedGameRepository.java`
 **Depends on**: T11
 **Reuses**: T10 `TrackedGame`
 **Requirement**: LIB-14
@@ -396,7 +396,7 @@ T20 -> T21
 ### T13: Add PlaySessionRepository port
 
 **What**: Interface `PlaySessionRepository`: save, listByTrackedGameId ordered (`playedAt` desc, `id` desc), findByIdAndTrackedGameId, delete, sumDurationByTrackedGameId.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/application/PlaySessionRepository.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/repository/PlaySessionRepository.java`
 **Depends on**: T12
 **Reuses**: T11 `PlaySession`
 **Requirement**: LIB-31
@@ -421,7 +421,7 @@ T20 -> T21
 ### T14: Add TrackedGameEntity
 
 **What**: JPA `TrackedGameEntity` mapped to `tracked_game` with unique `rawgId`, nullable year/cover/rating, enum `PlayStatus`.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/persistence/TrackedGameEntity.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/entity/TrackedGameEntity.java`
 **Depends on**: T13
 **Reuses**: Flyway columns from T5; T10 `PlayStatus`
 **Requirement**: LIB-06
@@ -446,7 +446,7 @@ T20 -> T21
 ### T15: Add PlaySessionEntity and cascade
 
 **What**: JPA `PlaySessionEntity` mapped to `play_session`. Wire `@OneToMany` cascade + orphanRemoval on `TrackedGameEntity` so deleting a tracked game removes sessions.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/persistence/PlaySessionEntity.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/entity/PlaySessionEntity.java`
 **Depends on**: T14
 **Reuses**: T14 `TrackedGameEntity`; Flyway FK cascade
 **Requirement**: LIB-25
@@ -472,7 +472,7 @@ T20 -> T21
 ### T16: Implement JpaTrackedGameRepository
 
 **What**: `JpaTrackedGameRepository` implements `TrackedGameRepository`. Maps entity ↔ domain. Spring Data stays inside `adapter.persistence`.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/persistence/JpaTrackedGameRepository.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/repository/JpaTrackedGameRepository.java`
 **Depends on**: T15
 **Reuses**: T12 port; T14 entity; Testcontainers from T1
 **Requirement**: LIB-14
@@ -500,7 +500,7 @@ T20 -> T21
 ### T17: Implement JpaPlaySessionRepository
 
 **What**: `JpaPlaySessionRepository` implements `PlaySessionRepository`. List ordered, ownership lookup, SUM of duration, cascade delete with the tracked game.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/persistence/JpaPlaySessionRepository.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/repository/JpaPlaySessionRepository.java`
 **Depends on**: T16
 **Reuses**: T13 port; T15 entity; Testcontainers from T1
 **Requirement**: LIB-31
@@ -529,7 +529,7 @@ T20 -> T21
 ### T18: Implement TrackedGameService domain rules
 
 **What**: Interface `TrackedGameService` and `TrackedGameServiceImpl` for add (snapshot from `GameCatalog`, default `PLAYING`, rating null, `totalMinutes` 0), list by id asc, get, patch (partial, free status transitions, ignore `rating: null`), delete. Duplicate → 409. Unknown RAWG id / unknown tracked game → not-found. `totalMinutes` via SUM of sessions on read.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/application/TrackedGameService.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/service/TrackedGameService.java`
 **Depends on**: T6, T17
 **Reuses**: `GameCatalog` (T6); ports T12/T13; in-memory fakes in Spock (no Spring)
 **Requirement**: LIB-06
@@ -557,7 +557,7 @@ T20 -> T21
 ### T19: Expose tracked-games HTTP API
 
 **What**: `TrackedGameController` for POST/GET/PATCH/DELETE `/tracked-games` and GET `/tracked-games/{id}` with DTO validation. Inject `TrackedGameService`. Wire 201/200/204 and handler mappings for 400/404/409/502.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/web/TrackedGameController.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/controller/TrackedGameController.java`
 **Depends on**: T9, T18
 **Reuses**: `ApiExceptionHandler` from T9; `@Valid` DTOs
 **Requirement**: LIB-06
@@ -585,7 +585,7 @@ T20 -> T21
 ### T20: Implement SessionService domain rules
 
 **What**: Interface `SessionService` and `SessionServiceImpl` for create (`playedAt` default today, any play status), list ordered, delete with ownership 404, `totalMinutes` = SUM after create/delete. Reject `durationMinutes` ≤ 0.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/application/SessionService.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/service/SessionService.java`
 **Depends on**: T17
 **Reuses**: ports T12/T13; in-memory fakes in Spock
 **Requirement**: LIB-27
@@ -612,7 +612,7 @@ T20 -> T21
 ### T21: Expose session HTTP API
 
 **What**: `SessionController` for POST/GET `/tracked-games/{id}/sessions` and DELETE `/tracked-games/{id}/sessions/{sessionId}`. Inject `SessionService`. 201/200/204. Validation 400 for duration and `playedAt` format.
-**Where**: `src/main/java/com/brunoandreotti/game_tracker/tracking/adapter/web/SessionController.java`
+**Where**: `src/main/java/com/brunoandreotti/game_tracker/controller/SessionController.java`
 **Depends on**: T9, T20
 **Reuses**: T9 exception handler; T19 JSON error shape
 **Requirement**: LIB-27

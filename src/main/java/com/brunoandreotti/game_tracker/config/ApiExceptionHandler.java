@@ -1,7 +1,8 @@
 package com.brunoandreotti.game_tracker.config;
 
-import com.brunoandreotti.game_tracker.catalog.application.CatalogUnavailableException;
-import com.brunoandreotti.game_tracker.catalog.application.GameNotFoundException;
+import com.brunoandreotti.game_tracker.exception.CatalogUnavailableException;
+import com.brunoandreotti.game_tracker.dto.ApiErrorResponse;
+import com.brunoandreotti.game_tracker.exception.GameNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

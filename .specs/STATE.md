@@ -6,7 +6,7 @@
 - **Decision**: All RAWG access goes through a `GameCatalog` port in `catalog`. HTTP client types (Feign or `@HttpExchange`) stay in the adapter. The rest of the app does not import them.
 - **Reason**: Search and add both need the catalog. Swapping Feign for Boot HTTP services (or a fake in tests) must not touch tracking code.
 - **Trade-off**: One extra type versus calling the HTTP client from services.
-- **Scope**: `com.brunoandreotti.game_tracker.catalog` and every caller of catalog data
+- **Scope**: `com.brunoandreotti.game_tracker.client` and every caller of catalog data
 - **Date**: 2026-08-27
 - **Status**: active
 
@@ -40,13 +40,21 @@
 - **Trade-off**: Mais tipos (interface + classe + entidade JPA). Sem interface por endpoint.
 - **Scope**: todo o código de feature sob `com.brunoandreotti.game_tracker`
 - **Date**: 2026-08-27
+- **Status**: superseded (layout de pacotes — ver AD-008)
+
+### AD-008
+- **Decision**: Pacotes planos por camada técnica na raiz: `controller`, `service`, `repository`, `client`, `model`, `entity`, `dto`, `exception`, `config`. Portas hexagonais mantidas (`GameCatalogPort`, `TrackedGameRepository` + impls). Sem pastas `catalog/` ou `tracking/`.
+- **Reason**: Navegação por responsabilidade (todos os controllers num lugar) é mais clara para o Bruno do que feature + domain/application/adapter.
+- **Trade-off**: Perde agrupamento visual catalog vs tracking; pastas `service/` e `repository/` crescem com novas features.
+- **Scope**: todo o código sob `com.brunoandreotti.game_tracker` (main + test)
+- **Date**: 2026-08-27
 - **Status**: active
 
 ### AD-006
 - **Decision**: RAWG HTTP via OpenFeign (`@FeignClient`), não `@HttpExchange`. Spring Cloud BOM **2025.1.x (Oakwood)** com Boot **4.1.1** — sem downgrade de Boot.
 - **Reason**: Preferência explícita do Bruno; matriz oficial Spring Cloud 2025.1.2+ suporta Boot 4.1.x com release train estável.
 - **Trade-off**: Dependência Spring Cloud no classpath; adapter continua isolado atrás de `GameCatalog`.
-- **Scope**: `catalog.adapter.http`, `pom.xml`, `application.yaml`, testes WireMock
+- **Scope**: `client`, `pom.xml`, `application.yaml`, testes WireMock
 - **Date**: 2026-08-27
 - **Status**: active
 
@@ -61,7 +69,7 @@
 ## Handoff
 
 - **Feature**: library-v1 / `.specs/features/library-v1`
-- **Phase / Task**: Phase 3 Persistence concluída (T10–T17). Aguardando confirmação para Phase 4 HTTP tracking (T18–T21)
+- **Phase / Task**: Pacotes reorganizados por camada (AD-008). Phase 4 HTTP tracking (T18–T21) pendente
 - **Completed**: T1–T17 (Phase 1 Infra + Phase 2 Search + Phase 3 Persistence)
 - **In-progress**: none
 - **Next step**: Perguntar se Bruno quer Phase 4 HTTP tracking. Cadence: uma fase por vez

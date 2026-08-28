@@ -113,10 +113,10 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] `.env.example` documents `VITE_API_URL`
-- [ ] `vite-env.d.ts` types `VITE_API_URL`
-- [ ] No secrets committed
-- [ ] Gate check passes: `cd frontend && npm run build`
+- [x] `.env.example` documents `VITE_API_URL`
+- [x] `vite-env.d.ts` types `VITE_API_URL`
+- [x] No secrets committed
+- [x] Gate check passes: `cd frontend && npm run build`
 
 **Tests**: none
 **Gate**: build

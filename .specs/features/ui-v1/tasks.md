@@ -527,19 +527,19 @@ T14 -> T15
 **What**: Add tests for load display, status/rating patch, session create, delete confirms, delete game navigate, patch failure.
 **Where**: `frontend/src/pages/TrackedGameDetailPage.test.tsx`
 **Depends on**: T14
-**Status**: Implementing
+**Status**: Done
 
 **Done when**:
 
-- [ ] Load shows heading, year, status, rating, minutes, sessions empty text
-- [ ] Status change calls patchTrackedGame and updates UI
-- [ ] Rating change calls patchTrackedGame and updates UI
-- [ ] Session create calls createSession and refreshes totals
-- [ ] deleteSession respects window.confirm true/false
-- [ ] deleteTrackedGame + navigate `/` when confirm true
-- [ ] Patch failure shows error; previous game data remains
-- [ ] Existing duration≤0 and 404 tests remain
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Load shows heading, year, status, rating, minutes, sessions empty text
+- [x] Status change calls patchTrackedGame and updates UI
+- [x] Rating change calls patchTrackedGame and updates UI
+- [x] Session create calls createSession and refreshes totals
+- [x] deleteSession respects window.confirm true/false
+- [x] deleteTrackedGame + navigate `/` when confirm true
+- [x] Patch failure shows error; previous game data remains
+- [x] Existing duration≤0 and 404 tests remain
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Commit**: `test(ui): cover detail status rating sessions deletes`
 

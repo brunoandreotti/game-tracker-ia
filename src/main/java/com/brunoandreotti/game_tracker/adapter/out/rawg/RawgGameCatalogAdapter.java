@@ -6,8 +6,6 @@ import com.brunoandreotti.game_tracker.core.exception.CatalogUnavailableExceptio
 import com.brunoandreotti.game_tracker.core.exception.GameNotFoundException;
 import com.brunoandreotti.game_tracker.core.model.GameSummary;
 import com.brunoandreotti.game_tracker.core.port.out.GameCatalogPort;
-import com.brunoandreotti.game_tracker.adapter.out.rawg.RawgGameDto;
-import com.brunoandreotti.game_tracker.adapter.out.rawg.RawgSearchResponseDto;
 import com.brunoandreotti.game_tracker.config.RawgProperties;
 import feign.FeignException;
 import feign.RetryableException;

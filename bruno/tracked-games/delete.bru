@@ -1,0 +1,17 @@
+meta {
+  name: Delete tracked game
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("delete returns 204", function() {
+    expect(res.status).to.equal(204);
+  });
+}

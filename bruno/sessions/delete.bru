@@ -1,0 +1,17 @@
+meta {
+  name: Delete session
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}/sessions/{{sessionId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("delete session returns 204", function() {
+    expect(res.status).to.equal(204);
+  });
+}

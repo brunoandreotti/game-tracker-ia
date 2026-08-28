@@ -1,0 +1,27 @@
+meta {
+  name: Add session 60 min
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}/sessions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "durationMinutes": 60
+  }
+}
+
+tests {
+  test("add session returns 201", function() {
+    expect(res.status).to.equal(201);
+  });
+}

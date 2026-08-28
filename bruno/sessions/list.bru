@@ -1,0 +1,17 @@
+meta {
+  name: List sessions
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}/sessions
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("list sessions returns 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

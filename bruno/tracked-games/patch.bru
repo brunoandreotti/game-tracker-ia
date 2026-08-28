@@ -1,0 +1,28 @@
+meta {
+  name: Patch status and rating
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "status": "COMPLETED",
+    "rating": 9
+  }
+}
+
+tests {
+  test("patch returns 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

@@ -2,7 +2,6 @@ package com.brunoandreotti.game_tracker.adapter.in.web;
 
 import java.util.List;
 
-import com.brunoandreotti.game_tracker.adapter.in.web.GameSearchResponse;
 import com.brunoandreotti.game_tracker.core.port.in.GameSearchService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

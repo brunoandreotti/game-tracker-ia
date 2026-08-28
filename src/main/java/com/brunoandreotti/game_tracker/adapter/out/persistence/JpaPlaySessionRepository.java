@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brunoandreotti.game_tracker.adapter.out.persistence.PlaySessionEntity;
 import com.brunoandreotti.game_tracker.core.exception.TrackedGameNotFoundException;
 import com.brunoandreotti.game_tracker.core.model.PlaySession;
 import com.brunoandreotti.game_tracker.core.port.out.PlaySessionRepository;

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.brunoandreotti.game_tracker.adapter.out.persistence.TrackedGameEntity;
 import com.brunoandreotti.game_tracker.core.exception.DuplicateRawgIdException;
 import com.brunoandreotti.game_tracker.core.model.TrackedGame;
 import com.brunoandreotti.game_tracker.core.port.out.TrackedGameRepository;

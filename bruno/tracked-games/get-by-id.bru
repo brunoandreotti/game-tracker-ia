@@ -1,0 +1,17 @@
+meta {
+  name: Get tracked game
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/tracked-games/{{trackedGameId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("get returns 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

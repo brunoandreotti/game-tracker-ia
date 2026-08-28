@@ -38,9 +38,19 @@ Nada disto está no código ainda. Versões finas se cravam na implementação, 
 - Schema: **Flyway** no v1. Sem Hibernate `ddl-auto` no jeito oficial (Compose + migrações).
 - Validação: **`spring-boot-starter-validation`** nos DTOs (`q` não vazio, nota 1–10, `durationMinutes` > 0).
 
+## Frontend (UI v1)
+
+- Pasta: **`frontend/`** na raiz do repo (backend Spring permanece na raiz; sem `api/` por agora).
+- **React + Vite + TypeScript** (SPA). Sem Next.js no v1.
+- Estilo (estudo, AD-013): **Tailwind CSS + shadcn/ui** (componentes copiados para `frontend/src/components/ui/`). Tema dark Letterboxd (AD-012). CSS global legado pode coexistir na migração e ser reduzido depois.
+- Dev: Vite em porta própria (`5173`); `VITE_API_URL` aponta para o Spring. CORS no backend.
+- UI em português; desktop-first.
+- Spec: [`.specs/features/ui-v1`](../.specs/features/ui-v1/spec.md).
+- Código do front só quando Bruno pedir para implementar / evoluir.
+
 ## Fora até alguém pedir
 
-Security, OpenAPI, Redis.
+Security, OpenAPI, Redis, Next.js, kits tipo antd/MUI (shadcn escolhido em vez deles).
 
 ## Context7
 

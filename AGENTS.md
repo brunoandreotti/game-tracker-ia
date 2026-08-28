@@ -1,23 +1,24 @@
 # Game Tracker
 
-Spring Boot backend scaffold. Product vision and planned stack live in [`docs/`](docs/README.md) ([product](docs/product.md), [stack](docs/stack.md), [open items](docs/open.md)). Implement only what is asked; do not invent beyond those docs.
+Spring Boot API + UI planejada em `frontend/`. Product vision and planned stack live in [`docs/`](docs/README.md) ([product](docs/product.md), [stack](docs/stack.md), [open items](docs/open.md)). Implement only what is asked; do not invent beyond those docs.
 
 ## Planning
 
 Planning is collaborative and stays open until Bruno asks to implement.
 
-- **Ask questions** throughout planning — product, API, stack, gaps in [`docs/open.md`](docs/open.md). Do not wait for a complete spec.
+- **Ask questions** throughout planning — product, API, stack, UI, gaps in [`docs/open.md`](docs/open.md). Do not wait for a complete spec.
 - **Give opinions and suggestions** (trade-offs, defaults, what can wait). Bruno will bring ideas; help define what is still missing.
 - **Propose, then confirm.** Do not write undecided behavior into `docs/` as if it were decided.
 - When something is decided, update the relevant file under `docs/` and remove it from `docs/open.md`.
-- Do not start coding (Java, Docker, new dependencies) until explicitly asked to implement.
+- Do not start coding (Java, `frontend/`, Docker, new dependencies) until explicitly asked to implement.
+- Front-end: Bruno knows TypeScript but little of UI frameworks — explain React concepts briefly when they appear; prefer a thin stack (see [`docs/stack.md`](docs/stack.md) and [`.specs/features/ui-v1`](.specs/features/ui-v1/spec.md)).
 
 ## Stack
 
-- Java 21, Spring Boot 4.1.1, Maven 3.9+ (`mvn` no PATH; wrapper `mvnw` / `mvnw.cmd` ainda no repo)
+- Java 21, Spring Boot 4.1.1, Maven 3.9+ (`mvn` on PATH; wrapper `mvnw` / `mvnw.cmd` still in repo)
 - Web: `spring-boot-starter-webmvc`
-- Persistence planned: PostgreSQL driver is on the classpath; JPA/JDBC and datasource config are not added yet
-- Planned stack (Compose, Feign, JPA, Testcontainers, WireMock): [`docs/stack.md`](docs/stack.md) — do not add those dependencies until implementing
+- Persistence: PostgreSQL + JPA + Flyway (see stack.md)
+- Planned UI: React + Vite + TypeScript in `frontend/` — do not scaffold until asked to implement UI v1
 - Lombok is configured as an annotation processor
 - Package: `com.brunoandreotti.game_tracker`
 
@@ -31,17 +32,25 @@ mvn spring-boot:run
 mvn -q package
 ```
 
+UI (após existir `frontend/`):
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
 ## Layout
 
 ```
-docs/                                            # product, stack, open items (planning until implemented)
-src/main/java/com/brunoandreotti/game_tracker/   # application code
+docs/                                            # product, stack, open items
+.specs/features/                                 # library-v1 (API), ui-v1 (UI)
+frontend/                                        # React + Vite + TS (UI v1 — criar só na Execute)
+src/main/java/com/brunoandreotti/game_tracker/   # API application code
 src/main/resources/application.yaml              # Spring config
 src/test/groovy/com/brunoandreotti/game_tracker/ # Spock specs (`*Spec.groovy`)
 src/test/java/com/brunoandreotti/game_tracker/   # JUnit (`contextLoads`) and shared test config
 ```
 
-Keep the root package as-is. Zonas hexagonais (AD-009). `core/` não importa Spring, JPA nem Feign.
+Keep the root package as-is. Zonas hexagonais (AD-009). `core/` não importa Spring, JPA nem Feign. Não mover o backend para `api/` sem decisão nova (AD-010).
 
 ```
 src/main/java/com/brunoandreotti/game_tracker/
@@ -93,10 +102,11 @@ Always use the Context7 MCP when I need code generation, setup or configuration 
 3. Call `query-docs` with that `libraryId` and the specific question.
 4. Answer from the fetched docs; cite the library version when relevant.
 
-Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spock, Spring Cloud OpenFeign, and any other dependency or API this project uses.
+Use this for Spring Boot, Spring Web MVC, PostgreSQL, Lombok, Maven, JUnit, Spock, Spring Cloud OpenFeign, React, Vite, and any other dependency or API this project uses.
 
 ## Do not
 
 - Invent domain entities, APIs, or product behavior beyond [`docs/product.md`](docs/product.md).
 - Commit, push, or change git config unless explicitly asked.
 - Rewrite the scaffold, rename the package, or add unrelated tooling.
+- Scaffold `frontend/` or add UI deps until explicitly asked to implement UI v1.

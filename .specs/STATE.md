@@ -74,13 +74,45 @@
 - **Date**: 2026-08-27
 - **Status**: active
 
+### AD-010
+- **Decision**: UI v1 lives in `frontend/` at the repo root (React + Vite + TypeScript SPA). Backend stays at the repo root; do not move Java to `api/` in this step. UI Portuguese, diary-minimal, routes `/`, `/search`, `/games/:id`.
+- **Reason**: Guided planning 2026-08-28 — less churn than a full `api/`+`frontend/` split; happy-path UI needs search + track + list + detail + sessions.
+- **Trade-off**: Root mixes Maven and (later) npm; a future `api/` move remains possible.
+- **Scope**: `frontend/`, CORS/`VITE_API_URL` on Execute, docs + `.specs/features/ui-v1`
+- **Date**: 2026-08-28
+- **Status**: active
+
+### AD-011
+- **Decision**: UI talks to the API with a thin `fetch` client (`apiClient` + `gamesApi`). React Router in library mode (`BrowserRouter`). No Redux/TanStack Query in v1. CORS via Spring `WebMvcConfigurer` and `app.cors.allowed-origins` (default `http://localhost:5173`). Front tests: Vitest + Testing Library (no E2E in v1).
+- **Reason**: Fewer moving parts while Bruno learns React; CORS is the real cross-origin contract for a separate Vite port.
+- **Trade-off**: More manual loading/error state per page; no shared server-cache layer.
+- **Scope**: `frontend/src/api`, `CorsConfig`, ui-v1 design/tasks
+- **Date**: 2026-08-28
+- **Status**: active
+
+### AD-012
+- **Decision**: UI dark-only no v1, inspirada em Letterboxd/Backloggd: canvas `#12161a`, accent verde `#00c030`, tipografia Fraunces + DM Sans, marca “Game Tracker”. Detalhe usa painéis `log-panel` alinhados para progresso e sessões.
+- **Reason**: UAT visual — UI clara parecia scaffold; Bruno pediu tema escuro de diário e formulários de log mais alinhados.
+- **Trade-off**: Sem toggle claro no v1; fontes via Google Fonts (rede no primeiro load).
+- **Scope**: `frontend/` CSS + AppLayout + TrackedGameDetailPage
+- **Date**: 2026-08-28
+- **Status**: active
+
+### AD-013
+- **Decision**: Adotar **shadcn/ui + Tailwind** no `frontend/` (estudo). Componentes via CLI copiados para `src/components/ui/`. Não usar antd/MUI/Mantine neste passo.
+- **Reason**: Bruno quer framework de componentes para aprender; shadcn mantém código no repo e encaixa no dark Letterboxd (AD-012) melhor que kits enterprise.
+- **Trade-off**: Introduz Tailwind (reversão da linha “sem Tailwind no v1”); setup inicial maior; migração gradual do CSS global.
+- **Scope**: `frontend/` — init Tailwind/shadcn; primeiro uso no detalhe (Select, Dialog, Card, Button, Input)
+- **Date**: 2026-08-28
+- **Status**: active
+
 ## Handoff
 
-- **Feature**: library-v1 / `.specs/features/library-v1`
-- **Phase / Task**: Phase 4 HTTP tracking (T18–T21) concluída
-- **Completed**: T1–T21 (library-v1 MVP API)
+- **Feature**: ui-shadcn / `.specs/features/ui-shadcn`
+- **Phase / Task**: Execute + Verifier PASS (T1–T5)
+- **Completed**: Spec/context/design/tasks; Tailwind+shadcn; detail Card/Select/Input/Button/AlertDialog; validation PASS
 - **In-progress**: none
-- **Next step**: Validar demo manual (`curl`) ou fechar feature library-v1
+- **Next step**: Bruno UAT on detail (dark + dialogs); optionally commit leftover docs/dark polish (AppLayout/global.css); later migrate list/search
 - **Blockers**: none
-- **Uncommitted files**: Phase 4 implementation (src + specs)
+- **Uncommitted files**: STATE/docs drift, ui-v1 specs, AppLayout/global.css dark polish, validation.md
 - **Branch**: main

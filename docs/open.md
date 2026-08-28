@@ -1,11 +1,15 @@
 # Ainda em aberto
 
-Nada bloqueia o v1. Brief em [product.md](product.md) e [stack.md](stack.md). Contrato executável em [.specs/features/library-v1](../.specs/features/library-v1/spec.md). Rotas de acompanhamento: `/tracked-games`. Arquitetura: hexagonal prática (AD-005).
+API library-v1 e UI v1 (happy path + dark AD-012) em código. Próximo estudo de UI: **shadcn + Tailwind** (AD-013). Brief em [product.md](product.md) e [stack.md](stack.md).
 
 ## Na implementação (não precisa cravar agora)
 
-_(nenhum item no momento)_
+- Versões finas Tailwind/shadcn no dia do setup (Context7).
+- Quão longe migrar CSS global vs deixar coexistir na 1ª leva.
+- Detalhe de packing CORS se houver mais de uma origem além de `5173`.
 
 ## Processo
 
-- Código só quando você pedir para implementar. Ordem: infra → busca → jogos acompanhados → sessões (`.specs/features/library-v1/tasks.md`). Mais de um batch: na Execute, oferecer sub-agents, não disparar sozinho.
+- UI v1: implementada + validation PASS; polish dark feito.
+- shadcn (AD-013): decidido; **código só com permissão explícita**.
+- Não mover backend para `api/` neste passo.

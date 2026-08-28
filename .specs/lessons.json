@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "promote_threshold": 2,
+  "window_days": 45,
+  "quarantine_threshold": 2,
+  "next_id": 5,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "ac_gap::page acs need testing library assertions for happy path render not only empty state or client side guards",
+      "text": "Page ACs need Testing Library assertions for happy path render, not only empty-state or client-side guards",
+      "signal": "ac_gap",
+      "scope": "frontend/pages",
+      "status": "candidate",
+      "features": [
+        "ui-v1"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "validation.md:P1 list content ACs (frontend/pages)"
+      ],
+      "created": "2026-08-28T18:40:37Z",
+      "last_seen": "2026-08-28T18:40:37Z"
+    },
+    {
+      "id": "L-002",
+      "key": "ac_gap::mutating ui flows must assert the api call payload and the refreshed on screen state after success",
+      "text": "Mutating UI flows must assert the API call payload and the refreshed on-screen state after success",
+      "signal": "ac_gap",
+      "scope": "frontend/pages",
+      "status": "candidate",
+      "features": [
+        "ui-v1"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "validation.md:P1 detail mutate ACs (frontend/pages)"
+      ],
+      "created": "2026-08-28T18:40:37Z",
+      "last_seen": "2026-08-28T18:40:37Z"
+    },
+    {
+      "id": "L-003",
+      "key": "spec_precision_gap::visual style acs that cannot be automated must be marked for interactive uat instead of claimed as verified by build alone",
+      "text": "Visual style ACs that cannot be automated must be marked for interactive UAT instead of claimed as verified by build alone",
+      "signal": "spec_precision_gap",
+      "scope": "frontend",
+      "status": "candidate",
+      "features": [
+        "ui-v1"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "validation.md:P2 visual diary AC (frontend)"
+      ],
+      "created": "2026-08-28T18:40:37Z",
+      "last_seen": "2026-08-28T18:40:37Z"
+    },
+    {
+      "id": "L-004",
+      "key": "spec_precision_gap::assert every branch named in an if ac including non numeric inputs when the criterion lists them",
+      "text": "Assert every branch named in an IF AC including non-numeric inputs when the criterion lists them",
+      "signal": "spec_precision_gap",
+      "scope": "frontend/pages",
+      "status": "candidate",
+      "features": [
+        "ui-shadcn"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "validation.md:SHAD-09 non-numeric duration (frontend/pages)"
+      ],
+      "created": "2026-08-28T20:17:54Z",
+      "last_seen": "2026-08-28T20:17:54Z"
+    }
+  ]
+}

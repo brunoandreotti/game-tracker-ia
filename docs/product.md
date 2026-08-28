@@ -22,13 +22,27 @@ Três conceitos:
 
 **Sessão:** `durationMinutes` + `playedAt`.
 
-App **single-user**, sem autenticação (uso local). Sem UI: HTTP client / `curl`.
+App **single-user**, sem autenticação (uso local).
 
 `POST /tracked-games`: status inicial opcional; se omitido, default **`PLAYING`**.
 
-v1 inclui **DELETE** de sessão e de jogo acompanhado (corrigir erro / parar de acompanhar).
+API v1 inclui **DELETE** de sessão e de jogo acompanhado (corrigir erro / parar de acompanhar).
 
-## API (especificação, não implementada)
+## UI v1 (planejada)
+
+SPA em [`frontend/`](../frontend/) (React + Vite + TypeScript). Consome a API local; UI em português; visual de diário **dark** (Letterboxd-like, AD-012). Estudo de componentes: **shadcn/ui + Tailwind** (AD-013).
+
+| Rota | Papel |
+|---|---|
+| `/` | Lista de jogos acompanhados |
+| `/search` | Busca RAWG + acompanhar |
+| `/games/:id` | Detalhe: status, nota, sessões (criar/apagar), apagar acompanhamento |
+
+Happy path na UI: buscar → acompanhar → lista → detalhe → sessões → nota/status. Spec: [`.specs/features/ui-v1`](../.specs/features/ui-v1/spec.md).
+
+Sem mover o backend para `api/` neste passo. CORS e `VITE_API_URL` na implementação.
+
+## API v1
 
 IDs de jogo acompanhado e sessão: `Long` sequencial. Horas totais no JSON: `totalMinutes` (inteiro). “2h30” no demo é leitura humana, não o campo.
 
@@ -96,23 +110,26 @@ Corpo: `{ "status", "error", "message" }` (sem RFC 7807 no v1).
 | 409 | `rawgId` já está sendo acompanhado |
 | 502 / 503 | RAWG indisponível na busca ou no add |
 
-## Fora do v1
+## Fora da API v1 / UI v1
 
-- UI / frontend
 - Cadastro, login, vários usuários
 - Import Steam, achievements, ranks
 - Review longa, plataforma (PC/Switch/PS5), tags
 - Estatísticas (horas no mês, média de nota, streaks)
 - Filtro de `GET /tracked-games` por status, paginação
 - RFC 7807 (Problem Details); limpar nota (`rating: null`)
+- Next.js, Tailwind/design system, PWA, app mobile
+- Monorepo `api/` + `frontend/` (adiado; só `frontend/` na raiz por agora)
 
-## Depois do v1 (ordem)
+## Depois (ordem)
 
-1. Notas/plataforma — review curta e em qual console/PC
-2. UI simples — lista + logar sessão
+1. UI v1 — spec/context prontos; Design → Tasks → Execute quando pedido ([ui-v1](../.specs/features/ui-v1/spec.md))
+2. Notas/plataforma — review curta e em qual console/PC
 3. Números — totais por status, horas no período, zerados no ano
 4. Integrações extras — Steam opcional; RAWG continua o catálogo
 
 ## Pronto quando
 
-Só com a API: buscar “Zelda” no RAWG → acompanhar como `PLAYING` → duas sessões (90 min + 60 min) → listar com **`totalMinutes`: 150** (2h30) → nota 9 e status `COMPLETED`.
+**API v1:** buscar “Zelda” no RAWG → acompanhar como `PLAYING` → duas sessões (90 min + 60 min) → listar com **`totalMinutes`: 150** (2h30) → nota 9 e status `COMPLETED`.
+
+**UI v1:** o mesmo demo só pela interface em `frontend/`.

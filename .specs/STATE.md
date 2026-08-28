@@ -108,11 +108,11 @@
 
 ## Handoff
 
-- **Feature**: ui-shadcn / `.specs/features/ui-shadcn`
-- **Phase / Task**: Execute + Verifier PASS (T1–T5)
-- **Completed**: Spec/context/design/tasks; Tailwind+shadcn; detail Card/Select/Input/Button/AlertDialog; validation PASS
+- **Feature**: ui-shadcn (done) / ui-v1 (done)
+- **Phase / Task**: Leftover polish + docs committed
+- **Completed**: Dark chrome (`8ab0a6b`); specs/STATE/docs/lessons (`8853af3`); ui-shadcn Verifier PASS
 - **In-progress**: none
-- **Next step**: Bruno UAT on detail (dark + dialogs); optionally commit leftover docs/dark polish (AppLayout/global.css); later migrate list/search
+- **Next step**: UAT visual; optional migrate list/search to shadcn; decide on `bruno/api rawg.bru`
 - **Blockers**: none
-- **Uncommitted files**: STATE/docs drift, ui-v1 specs, AppLayout/global.css dark polish, validation.md
+- **Uncommitted files**: `bruno/api rawg.bru` only (left out)
 - **Branch**: main

@@ -85,7 +85,7 @@ class TrackedGameServiceImplSpec extends Specification {
 	def "Given two tracked games exist, When list is called, Then entries are returned with computed totalMinutes"() {
 		given: "two tracked games exist"
 		def first = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.PLAYING, null)
-		def second = new TrackedGame(2L, 456L, "Mario", 2020, null, PlayStatus.COMPLETED, 9)
+		def second = new TrackedGame(2L, 456L, "Mario", 2020, null, PlayStatus.COMPLETED, 5)
 
 		when: "list is called"
 		def results = service.list()
@@ -96,7 +96,7 @@ class TrackedGameServiceImplSpec extends Specification {
 		1 * playSessionRepository.sumDurationByTrackedGameId(2L) >> 0
 		results*.id() == [1L, 2L]
 		results[0].totalMinutes() == 150
-		results[1].rating() == 9
+		results[1].rating() == 5
 	}
 
 	def "Given tracked game 1 exists, When get is called for id 1, Then the tracked game view is returned"() {
@@ -121,47 +121,47 @@ class TrackedGameServiceImplSpec extends Specification {
 		thrown(TrackedGameNotFoundException)
 	}
 
-	def "Given tracked game 1 exists with rating 8, When patch sets only status to COMPLETED, Then rating stays 8"() {
-		given: "tracked game 1 exists with rating 8"
-		def existing = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.PLAYING, 8)
+	def "Given tracked game 1 exists with rating 4, When patch sets only status to COMPLETED, Then rating stays 4"() {
+		given: "tracked game 1 exists with rating 4"
+		def existing = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.PLAYING, 4)
 
 		when: "patch sets only status to COMPLETED"
 		def result = service.patch(1L, PlayStatus.COMPLETED, null)
 
-		then: "rating stays 8"
+		then: "rating stays 4"
 		1 * trackedGameRepository.findById(1L) >> Optional.of(existing)
 		1 * trackedGameRepository.save({ TrackedGame game ->
-			game.status() == PlayStatus.COMPLETED && game.rating() == 8
+			game.status() == PlayStatus.COMPLETED && game.rating() == 4
 		}) >> { TrackedGame game -> game }
 		1 * playSessionRepository.sumDurationByTrackedGameId(1L) >> 0
 		result.status() == PlayStatus.COMPLETED
-		result.rating() == 8
+		result.rating() == 4
 	}
 
-	def "Given tracked game 1 is COMPLETED, When patch sets only rating to 9, Then status stays COMPLETED"() {
+	def "Given tracked game 1 is COMPLETED, When patch sets only rating to 5, Then status stays COMPLETED"() {
 		given: "tracked game 1 is COMPLETED"
 		def existing = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.COMPLETED, null)
 
-		when: "patch sets only rating to 9"
-		def result = service.patch(1L, null, 9)
+		when: "patch sets only rating to 5"
+		def result = service.patch(1L, null, 5)
 
 		then: "status stays COMPLETED"
 		1 * trackedGameRepository.findById(1L) >> Optional.of(existing)
-		1 * trackedGameRepository.save({ it.status() == PlayStatus.COMPLETED && it.rating() == 9 }) >> { TrackedGame game -> game }
+		1 * trackedGameRepository.save({ it.status() == PlayStatus.COMPLETED && it.rating() == 5 }) >> { TrackedGame game -> game }
 		1 * playSessionRepository.sumDurationByTrackedGameId(1L) >> 0
-		result.rating() == 9
+		result.rating() == 5
 	}
 
 	def "Given tracked game 1 is COMPLETED, When patch sets status to WANT_TO_PLAY, Then the transition is allowed"() {
 		given: "tracked game 1 is COMPLETED"
-		def existing = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.COMPLETED, 9)
+		def existing = new TrackedGame(1L, 123L, "Zelda", 2017, "https://cover", PlayStatus.COMPLETED, 5)
 
 		when: "patch sets status to WANT_TO_PLAY"
 		def result = service.patch(1L, PlayStatus.WANT_TO_PLAY, null)
 
 		then: "the transition is allowed"
 		1 * trackedGameRepository.findById(1L) >> Optional.of(existing)
-		1 * trackedGameRepository.save({ it.status() == PlayStatus.WANT_TO_PLAY && it.rating() == 9 }) >> { TrackedGame game -> game }
+		1 * trackedGameRepository.save({ it.status() == PlayStatus.WANT_TO_PLAY && it.rating() == 5 }) >> { TrackedGame game -> game }
 		1 * playSessionRepository.sumDurationByTrackedGameId(1L) >> 0
 		result.status() == PlayStatus.WANT_TO_PLAY
 	}

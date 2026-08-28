@@ -98,14 +98,15 @@ T2 → T5
 
 **Done when**:
 
-- [ ] `@Min(0) @Max(5)` on `PatchTrackedGameRequest.rating`
-- [ ] PATCH 0 and 5 → 200; PATCH 6 → 400
-- [ ] Service fixtures and demo flow use ≤5 (e.g. 5 instead of 9)
-- [ ] `rating: null` PATCH no-op still covered by existing behavior
-- [ ] Gate full passes
+- [x] `@Min(0) @Max(5)` on `PatchTrackedGameRequest.rating`
+- [x] PATCH 0 and 5 → 200; PATCH 6 → 400
+- [x] Service fixtures and demo flow use ≤5 (e.g. 5 instead of 9)
+- [x] `rating: null` PATCH no-op still covered by existing behavior
+- [x] Gate full passes
 
 **Tests**: component (Spock)
 **Gate**: full
+**Status**: ✅ Complete
 
 **Commit**: `feat(api)!: accept rating 0-5 on tracked game PATCH`
 

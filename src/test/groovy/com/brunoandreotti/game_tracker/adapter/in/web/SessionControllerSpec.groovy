@@ -139,7 +139,7 @@ class SessionControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andExpect(jsonPath('$.status').value(404))
 	}
 
-	def "Given RAWG returns Zelda, When the v1 demo flow runs, Then totalMinutes is 150 and PATCH sets rating 9 and COMPLETED"() {
+	def "Given RAWG returns Zelda, When the v1 demo flow runs, Then totalMinutes is 150 and PATCH sets rating 5 and COMPLETED"() {
 		given: "RAWG returns Zelda"
 		stubRawgGame(123L, "The Legend of Zelda: Breath of the Wild", "2017-03-03", "https://cover")
 		wireMock().stubFor(com.github.tomakehurst.wiremock.client.WireMock.get(urlPathEqualTo("/games"))
@@ -164,13 +164,13 @@ class SessionControllerSpec extends RawgMockMvcIntegrationSpec {
 		def afterSessions = mockMvc.perform(get("/tracked-games/${trackedGameId}"))
 		def patch = mockMvc.perform(patch("/tracked-games/${trackedGameId}")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content('{"rating":9,"status":"COMPLETED"}'))
+				.content('{"rating":5,"status":"COMPLETED"}'))
 
-		then: "totalMinutes is 150 and PATCH sets rating 9 and COMPLETED"
+		then: "totalMinutes is 150 and PATCH sets rating 5 and COMPLETED"
 		afterSessions.andExpect(status().isOk())
 				.andExpect(jsonPath('$.totalMinutes').value(150))
 		patch.andExpect(status().isOk())
-				.andExpect(jsonPath('$.rating').value(9))
+				.andExpect(jsonPath('$.rating').value(5))
 				.andExpect(jsonPath('$.status').value("COMPLETED"))
 				.andExpect(jsonPath('$.totalMinutes').value(150))
 	}

@@ -104,11 +104,11 @@ A nota do diário usa escala 1–10, desalinhada do desejo de uma escala curta 0
 
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
-| RATE-01 | P1: Escala de nota 0–5 na API | Design | Pending |
-| RATE-02 | P1: Escala de nota 0–5 na API | Design | Pending |
-| RATE-03 | P1: Escala de nota 0–5 na API | Design | Pending |
+| RATE-01 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
+| RATE-02 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
+| RATE-03 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
 | RATE-04 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
-| RATE-05 | P1: Escala de nota 0–5 na API | Design | Pending |
+| RATE-05 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
 | RATE-06 | P1: Select numérico 0–5 no detalhe | Design | Pending |
 | RATE-07 | P1: Select numérico 0–5 no detalhe | Design | Pending |
 | RATE-08 | P1: Select numérico 0–5 no detalhe | Design | Pending |

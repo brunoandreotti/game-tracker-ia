@@ -161,7 +161,7 @@ class TrackedGameControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andExpect(jsonPath('$.status').value(404))
 	}
 
-	def "Given tracked game 1 exists, When PATCH /tracked-games/1 sets rating 9, Then rating is updated"() {
+	def "Given tracked game 1 exists, When PATCH /tracked-games/1 sets rating 5, Then rating is updated"() {
 		given: "tracked game 1 exists"
 		stubRawgGame(123L, "Zelda", "2017-03-03", "https://cover")
 		def create = mockMvc.perform(post("/tracked-games")
@@ -170,14 +170,34 @@ class TrackedGameControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andReturn()
 		def id = extractLongField(create.response.contentAsString, 'id')
 
-		when: "PATCH sets rating 9"
+		when: "PATCH sets rating 5"
 		def result = mockMvc.perform(patch("/tracked-games/${id}")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content('{"rating":9}'))
+				.content('{"rating":5}'))
 
 		then: "rating is updated"
 		result.andExpect(status().isOk())
-				.andExpect(jsonPath('$.rating').value(9))
+				.andExpect(jsonPath('$.rating').value(5))
+				.andExpect(jsonPath('$.status').value("PLAYING"))
+	}
+
+	def "Given tracked game 1 exists, When PATCH /tracked-games/1 sets rating 0, Then rating is updated"() {
+		given: "tracked game 1 exists"
+		stubRawgGame(123L, "Zelda", "2017-03-03", "https://cover")
+		def create = mockMvc.perform(post("/tracked-games")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content('{"rawgId":123}'))
+				.andReturn()
+		def id = extractLongField(create.response.contentAsString, 'id')
+
+		when: "PATCH sets rating 0"
+		def result = mockMvc.perform(patch("/tracked-games/${id}")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content('{"rating":0}'))
+
+		then: "rating is updated"
+		result.andExpect(status().isOk())
+				.andExpect(jsonPath('$.rating').value(0))
 				.andExpect(jsonPath('$.status').value("PLAYING"))
 	}
 
@@ -200,7 +220,7 @@ class TrackedGameControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andExpect(jsonPath('$.status').value(400))
 	}
 
-	def "Given tracked game 1 exists, When PATCH /tracked-games/1 sets rating 11, Then the response is 400"() {
+	def "Given tracked game 1 exists, When PATCH /tracked-games/1 sets rating 6, Then the response is 400"() {
 		given: "tracked game 1 exists"
 		stubRawgGame(123L, "Zelda", "2017-03-03", "https://cover")
 		def create = mockMvc.perform(post("/tracked-games")
@@ -209,10 +229,10 @@ class TrackedGameControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andReturn()
 		def id = extractLongField(create.response.contentAsString, 'id')
 
-		when: "PATCH sets rating 11"
+		when: "PATCH sets rating 6"
 		def result = mockMvc.perform(patch("/tracked-games/${id}")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content('{"rating":11}'))
+				.content('{"rating":6}'))
 
 		then: "the response is 400"
 		result.andExpect(status().isBadRequest())

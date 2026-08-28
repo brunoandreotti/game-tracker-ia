@@ -5,5 +5,5 @@ import com.brunoandreotti.game_tracker.core.model.PlayStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-public record PatchTrackedGameRequest(PlayStatus status, @Min(1) @Max(10) Integer rating) {
+public record PatchTrackedGameRequest(PlayStatus status, @Min(0) @Max(5) Integer rating) {
 }

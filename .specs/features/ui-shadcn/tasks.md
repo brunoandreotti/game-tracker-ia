@@ -91,10 +91,10 @@ T4 -> T5
 
 **Done when**:
 
-- [ ] `components.json` present
-- [ ] Theme variables set for dark diary + green accent
-- [ ] Default appearance is dark-only
-- [ ] `npm run build` succeeds
+- [x] `components.json` present
+- [x] Theme variables set for dark diary + green accent
+- [x] Default appearance is dark-only
+- [x] `npm run build` succeeds
 
 **Tests**: none
 **Gate**: build

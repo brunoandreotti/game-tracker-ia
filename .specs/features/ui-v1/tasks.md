@@ -11,7 +11,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/ui-v1/design.md`
-**Status**: In Progress
+**Status**: Implementing
 
 ---
 
@@ -253,9 +253,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Function matches design cases
-- [ ] Unit tests cover 0, minutes-only, hours-only, mixed
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Function matches design cases
+- [x] Unit tests cover 0, minutes-only, hours-only, mixed
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Tests**: unit
 **Gate**: quick
@@ -279,9 +279,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] All four statuses have PT labels
-- [ ] Unit tests assert the four mappings
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] All four statuses have PT labels
+- [x] Unit tests assert the four mappings
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Tests**: unit
 **Gate**: quick
@@ -305,9 +305,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Variables define text/bg/accent without store-like chrome
-- [ ] Imported once at app entry
-- [ ] Gate check passes: `cd frontend && npm run build`
+- [x] Variables define text/bg/accent without store-like chrome
+- [x] Imported once at app entry
+- [x] Gate check passes: `cd frontend && npm run build`
 
 **Tests**: none
 **Gate**: build
@@ -331,9 +331,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Loading and error messages render text via props
-- [ ] CoverImage does not show broken image for null URL
-- [ ] Gate check passes: `cd frontend && npm run build`
+- [x] Loading and error messages render text via props
+- [x] CoverImage does not show broken image for null URL
+- [x] Gate check passes: `cd frontend && npm run build`
 
 **Tests**: none
 **Gate**: build
@@ -357,9 +357,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Nav links to `/` and `/search` in Portuguese
-- [ ] Renders child route via Outlet
-- [ ] Gate check passes: `cd frontend && npm run build`
+- [x] Nav links to `/` and `/search` in Portuguese
+- [x] Renders child route via Outlet
+- [x] Gate check passes: `cd frontend && npm run build`
 
 **Tests**: none
 **Gate**: build
@@ -383,11 +383,11 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Fetches on mount; loading and error states work
-- [ ] Empty state links to `/search`
-- [ ] List shows PT status + formatted minutes + unset rating indication
-- [ ] Testing Library: empty state visible when API returns `[]`
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Fetches on mount; loading and error states work
+- [x] Empty state links to `/search`
+- [x] List shows PT status + formatted minutes + unset rating indication
+- [x] Testing Library: empty state visible when API returns `[]`
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Tests**: unit
 **Gate**: full
@@ -413,11 +413,11 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Exact checkbox maps to `exact=true`
-- [ ] Empty/whitespace query does not call API (tested)
-- [ ] Successful track navigates to `/games/{id}`
-- [ ] 409 shows PT message + link to existing game or `/`
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Exact checkbox maps to `exact=true`
+- [x] Empty/whitespace query does not call API (tested)
+- [x] Successful track navigates to `/games/{id}`
+- [x] 409 shows PT message + link to existing game or `/`
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Tests**: unit
 **Gate**: full
@@ -441,13 +441,13 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Loads game and sessions for `:id`
-- [ ] Status/rating PATCH refresh UI
-- [ ] Session create/delete refresh totals; invalid duration blocked client-side
-- [ ] Deletes require confirm; delete game navigates to `/`
-- [ ] 404 shows PT message + link home
-- [ ] At least one test for invalid duration (no API call)
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Loads game and sessions for `:id`
+- [x] Status/rating PATCH refresh UI
+- [x] Session create/delete refresh totals; invalid duration blocked client-side
+- [x] Deletes require confirm; delete game navigates to `/`
+- [x] 404 shows PT message + link home
+- [x] At least one test for invalid duration (no API call)
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Tests**: unit
 **Gate**: full
@@ -471,9 +471,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Three routes work under AppLayout
-- [ ] Default Vite counter/demo removed
-- [ ] Gate check passes: `cd frontend && npm run build` and `cd frontend && npm test`
+- [x] Three routes work under AppLayout
+- [x] Default Vite counter/demo removed
+- [x] Gate check passes: `cd frontend && npm run build` and `cd frontend && npm test`
 
 **Tests**: none
 **Gate**: build
@@ -482,10 +482,90 @@ T14 -> T15
 
 ---
 
+### Phase 4: Test coverage fixes (validation gaps)
+
+### T16: Fix TrackedGamesPage ACs
+
+**What**: Add tests for list happy path (two games), ApiError alert, and loading state.
+**Where**: `frontend/src/pages/TrackedGamesPage.test.tsx`
+**Depends on**: T12
+**Status**: Done
+
+**Done when**:
+
+- [x] Two games show names, PT status, rating labels, formatted minutes, detail links
+- [x] ApiError shows alert message; no list heading or fabricated data
+- [x] Deferred load shows `Carregando jogos...`
+- [x] Gate check passes: `cd frontend && npm test`
+
+**Commit**: `test(ui): cover tracked games list happy error loading`
+
+---
+
+### T17: Fix SearchPage ACs
+
+**What**: Add tests for results display, empty results, ApiError, loading state, and optional tracking disabled state.
+**Where**: `frontend/src/pages/SearchPage.test.tsx`
+**Depends on**: T13
+**Status**: Implementing
+
+**Done when**:
+
+- [ ] Results show name, year, cover img when coverUrl set
+- [ ] Empty search results show `Nenhum jogo encontrado.`
+- [ ] searchGames ApiError shows API message
+- [ ] Loading shows `Buscando jogos...` and disables Buscar button
+- [ ] Existing empty-query, exact, track nav, 409 tests remain
+- [ ] Gate check passes: `cd frontend && npm test`
+
+**Commit**: `test(ui): cover search results empty error loading`
+
+---
+
+### T18: Fix TrackedGameDetailPage mutate ACs
+
+**What**: Add tests for load display, status/rating patch, session create, delete confirms, delete game navigate, patch failure.
+**Where**: `frontend/src/pages/TrackedGameDetailPage.test.tsx`
+**Depends on**: T14
+**Status**: Implementing
+
+**Done when**:
+
+- [ ] Load shows heading, year, status, rating, minutes, sessions empty text
+- [ ] Status change calls patchTrackedGame and updates UI
+- [ ] Rating change calls patchTrackedGame and updates UI
+- [ ] Session create calls createSession and refreshes totals
+- [ ] deleteSession respects window.confirm true/false
+- [ ] deleteTrackedGame + navigate `/` when confirm true
+- [ ] Patch failure shows error; previous game data remains
+- [ ] Existing duration≤0 and 404 tests remain
+- [ ] Gate check passes: `cd frontend && npm test`
+
+**Commit**: `test(ui): cover detail status rating sessions deletes`
+
+---
+
+### T19: Fix AppLayout + CoverImage
+
+**What**: Add tests for nav links and CoverImage null/src behavior.
+**Where**: `frontend/src/components/AppLayout.test.tsx`, `frontend/src/components/Feedback.test.tsx`
+**Depends on**: T10, T11
+**Status**: Implementing
+
+**Done when**:
+
+- [ ] AppLayout nav links: Meus jogos → `/`, Buscar → `/search`
+- [ ] CoverImage null src → no img; url src → img with alt
+- [ ] Gate check passes: `cd frontend && npm test`
+
+**Commit**: `test(ui): cover app nav and null cover image`
+
+---
+
 ## Phase Execution Map
 
 ```
-Phase 1 -> Phase 2 -> Phase 3
+Phase 1 -> Phase 2 -> Phase 3 -> Phase 4
 
 Phase 1:  T1 -> T2 -> T4 -> T5 -> T6
           T1 -> T3
@@ -496,10 +576,12 @@ Phase 2:  T7 -> T12
 Phase 3:  T12 -> T15
           T13 -> T15
           T14 -> T15
+Phase 4:  T16 -> T17 -> T18 -> T19
 ```
-Preferred inline order: T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15.
 
-**Batches at Execute (~7 tasks):** Phase 1 (T1–T6) | Phase 2 (T7–T12) | Phase 3 (T13–T15). Offer sub-agents; do not auto-spawn. **No code until Bruno allows Execute.**
+Preferred inline order: T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19.
+
+**Batches at Execute (~7 tasks):** Phase 1 (T1–T6) | Phase 2 (T7–T12) | Phase 3 (T13–T15) | Phase 4 (T16–T19). Offer sub-agents; do not auto-spawn. **No code until Bruno allows Execute.**
 ---
 
 ## Task Granularity Check

@@ -109,11 +109,11 @@ A nota do diário usa escala 1–10, desalinhada do desejo de uma escala curta 0
 | RATE-03 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
 | RATE-04 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
 | RATE-05 | P1: Escala de nota 0–5 na API | Execute | ✅ Verified |
-| RATE-06 | P1: Select numérico 0–5 no detalhe | Design | Pending |
-| RATE-07 | P1: Select numérico 0–5 no detalhe | Design | Pending |
-| RATE-08 | P1: Select numérico 0–5 no detalhe | Design | Pending |
-| RATE-09 | P1: Select numérico 0–5 no detalhe | Design | Pending |
-| RATE-10 | P1: Select numérico 0–5 no detalhe | Design | Pending |
+| RATE-06 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
+| RATE-07 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
+| RATE-08 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
+| RATE-09 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
+| RATE-10 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
 | RATE-11 | P1: Estrelas na listagem | Design | Pending |
 | RATE-12 | P1: Estrelas na listagem | Design | Pending |
 | RATE-13 | P1: Estrelas na listagem | Design | Pending |

@@ -125,13 +125,13 @@ describe('TrackedGameDetailPage', () => {
     })
   })
 
-  it('Given rating set to 9, When the user selects 9, Then patchTrackedGame is called and UI shows Nota 9', async () => {
+  it('Given rating set to 5, When the user selects 5, Then patchTrackedGame is called and UI shows Nota 5', async () => {
     const user = userEvent.setup()
     vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
     vi.mocked(gamesApi.listSessions).mockResolvedValue([])
     vi.mocked(gamesApi.patchTrackedGame).mockResolvedValue({
       ...trackedGame,
-      rating: 9,
+      rating: 5,
     })
 
     renderDetailPage()
@@ -141,12 +141,53 @@ describe('TrackedGameDetailPage', () => {
     })
 
     await user.click(screen.getByRole('combobox', { name: 'Nota' }))
-    await user.click(await screen.findByRole('option', { name: '9' }))
+    await user.click(await screen.findByRole('option', { name: '5' }))
 
     await waitFor(() => {
-      expect(gamesApi.patchTrackedGame).toHaveBeenCalledWith(1, { rating: 9 })
-      expect(screen.getByText(/2017 · Jogando · Nota 9 · 0 min/)).toBeInTheDocument()
+      expect(gamesApi.patchTrackedGame).toHaveBeenCalledWith(1, { rating: 5 })
+      expect(screen.getByText(/2017 · Jogando · Nota 5 · 0 min/)).toBeInTheDocument()
     })
+  })
+
+  it('Given rating set to 0, When the user selects 0, Then patchTrackedGame is called and UI shows Nota 0', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+    vi.mocked(gamesApi.patchTrackedGame).mockResolvedValue({
+      ...trackedGame,
+      rating: 0,
+    })
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('combobox', { name: 'Nota' }))
+    await user.click(await screen.findByRole('option', { name: '0' }))
+
+    await waitFor(() => {
+      expect(gamesApi.patchTrackedGame).toHaveBeenCalledWith(1, { rating: 0 })
+      expect(screen.getByText(/2017 · Jogando · Nota 0 · 0 min/)).toBeInTheDocument()
+    })
+  })
+
+  it('Given rated game, When the user selects Sem nota, Then patchTrackedGame is not called', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue({ ...trackedGame, rating: 5 })
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('combobox', { name: 'Nota' }))
+    await user.click(await screen.findByRole('option', { name: 'Sem nota' }))
+
+    expect(gamesApi.patchTrackedGame).not.toHaveBeenCalled()
   })
 
   it('Given valid session duration, When the user submits, Then createSession is called and totals refresh', async () => {

@@ -143,8 +143,8 @@ export function TrackedGameDetailPage() {
     }
 
     const rating = Number(ratingValue)
-    if (Number.isNaN(rating) || rating < 1 || rating > 10) {
-      setMutationError('A nota deve ser um número entre 1 e 10.')
+    if (Number.isNaN(rating) || rating < 0 || rating > 5) {
+      setMutationError('A nota deve ser um número entre 0 e 5.')
       return
     }
 
@@ -312,7 +312,7 @@ export function TrackedGameDetailPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Sem nota</SelectItem>
-                  {Array.from({ length: 10 }, (_, index) => index + 1).map((value) => (
+                  {Array.from({ length: 6 }, (_, index) => index).map((value) => (
                     <SelectItem key={value} value={String(value)}>
                       {value}
                     </SelectItem>

@@ -127,14 +127,15 @@ T2 → T5
 
 **Done when**:
 
-- [ ] Select options: Sem nota, 0, 1, 2, 3, 4, 5
-- [ ] Selecting 0–5 PATCHes; Sem nota does not PATCH
-- [ ] Summary shows Nota 0 / Sem nota correctly
-- [ ] PT validation mentions 0 and 5
-- [ ] Vitest gate green
+- [x] Select options: Sem nota, 0, 1, 2, 3, 4, 5
+- [x] Selecting 0–5 PATCHes; Sem nota does not PATCH
+- [x] Summary shows Nota 0 / Sem nota correctly
+- [x] PT validation mentions 0 and 5
+- [x] Vitest gate green
 
 **Tests**: unit
 **Gate**: quick
+**Status**: ✅ Complete
 
 **Commit**: `feat(ui): use 0-5 numeric rating select on detail`
 

@@ -541,11 +541,11 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Impl depends on `GameCatalog`, `TrackedGameRepository`, `PlaySessionRepository` only
-- [ ] Spock domain specs cover LIB-06–LIB-13, LIB-15–LIB-26 (snapshot, default status, 409, 404 catalog, computed `totalMinutes`, free transitions, PATCH rules, delete cascade, `rating: null` no-op)
-- [ ] No Spring context in these specs
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 12 tests pass (no silent deletions)
+- [x] Impl depends on `GameCatalog`, `TrackedGameRepository`, `PlaySessionRepository` only
+- [x] Spock domain specs cover LIB-06–LIB-13, LIB-15–LIB-26 (snapshot, default status, 409, 404 catalog, computed `totalMinutes`, free transitions, PATCH rules, delete cascade, `rating: null` no-op)
+- [x] No Spring context in these specs
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 12 tests pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: quick
@@ -569,11 +569,11 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `@SpringBootTest` (Postgres + WireMock) covers happy paths plus 400/404/409/502 for `/tracked-games` (LIB-06–LIB-26 HTTP)
-- [ ] Controller, `TrackedGameServiceImpl`, and JPA adapters are real
-- [ ] JSON matches product.md (including `totalMinutes`)
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 8 tests pass (no silent deletions)
+- [x] `@SpringBootTest` (Postgres + WireMock) covers happy paths plus 400/404/409/502 for `/tracked-games` (LIB-06–LIB-26 HTTP)
+- [x] Controller, `TrackedGameServiceImpl`, and JPA adapters are real
+- [x] JSON matches product.md (including `totalMinutes`)
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 8 tests pass (no silent deletions)
 
 **Tests**: component
 **Gate**: full
@@ -597,10 +597,10 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] Impl depends on `TrackedGameRepository` and `PlaySessionRepository` only
-- [ ] Spock domain specs cover LIB-27–LIB-37 (two sessions 90+60 → 150, default date, any status, delete recalc, unknown game/session 404, duration ≤ 0, duplicate same `playedAt` allowed)
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 8 tests pass (no silent deletions)
+- [x] Impl depends on `TrackedGameRepository` and `PlaySessionRepository` only
+- [x] Spock domain specs cover LIB-27–LIB-37 (two sessions 90+60 → 150, default date, any status, delete recalc, unknown game/session 404, duration ≤ 0, duplicate same `playedAt` allowed)
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 8 tests pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: quick
@@ -624,11 +624,11 @@ T20 -> T21
 
 **Done when**:
 
-- [ ] `@SpringBootTest` (Postgres + WireMock) covers LIB-27–LIB-37 HTTP (201, default `playedAt`, list order, 204 delete, 400, 404 nested)
-- [ ] Controller, `SessionServiceImpl`, and JPA adapters are real
-- [ ] Same style of spec covers the demo: search → track → 90+60 → `totalMinutes` 150 → PATCH 9 + COMPLETED
-- [ ] Gate check passes: `mvn test`
-- [ ] Test count: at least 7 tests pass (no silent deletions)
+- [x] `@SpringBootTest` (Postgres + WireMock) covers LIB-27–LIB-37 HTTP (201, default `playedAt`, list order, 204 delete, 400, 404 nested)
+- [x] Controller, `SessionServiceImpl`, and JPA adapters are real
+- [x] Same style of spec covers the demo: search → track → 90+60 → `totalMinutes` 150 → PATCH 9 + COMPLETED
+- [x] Gate check passes: `mvn test`
+- [x] Test count: at least 7 tests pass (no silent deletions)
 
 **Tests**: component
 **Gate**: full

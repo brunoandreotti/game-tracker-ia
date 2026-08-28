@@ -77,10 +77,10 @@
 ## Handoff
 
 - **Feature**: library-v1 / `.specs/features/library-v1`
-- **Phase / Task**: Hex zones refactor (AD-009) concluído. Phase 4 HTTP tracking (T18–T21) pendente
-- **Completed**: T1–T17 (Phase 1 Infra + Phase 2 Search + Phase 3 Persistence); AD-009 layout
+- **Phase / Task**: Phase 4 HTTP tracking (T18–T21) concluída
+- **Completed**: T1–T21 (library-v1 MVP API)
 - **In-progress**: none
-- **Next step**: Perguntar se Bruno quer Phase 4 HTTP tracking. Cadence: uma fase por vez
+- **Next step**: Validar demo manual (`curl`) ou fechar feature library-v1
 - **Blockers**: none
-- **Uncommitted files**: refactor hex zones (src + docs)
+- **Uncommitted files**: Phase 4 implementation (src + specs)
 - **Branch**: main

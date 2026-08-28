@@ -6,7 +6,7 @@ import com.brunoandreotti.game_tracker.core.model.GameSummary;
 
 public interface GameCatalogPort {
 
-	List<GameSummary> search(String query);
+	List<GameSummary> search(String query, boolean exact);
 
 	GameSummary getByRawgId(long rawgId);
 

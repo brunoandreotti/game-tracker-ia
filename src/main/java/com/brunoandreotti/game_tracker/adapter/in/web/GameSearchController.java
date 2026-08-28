@@ -20,8 +20,10 @@ public class GameSearchController {
 	private final GameSearchService gameSearchService;
 
 	@GetMapping("/search")
-	public List<GameSearchResponse> search(@RequestParam @NotBlank String q) {
-		return gameSearchService.search(q).stream()
+	public List<GameSearchResponse> search(
+			@RequestParam @NotBlank String q,
+			@RequestParam(defaultValue = "false") boolean exact) {
+		return gameSearchService.search(q, exact).stream()
 				.map(GameSearchResponse::from)
 				.toList();
 	}

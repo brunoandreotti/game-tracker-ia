@@ -40,7 +40,7 @@ Cópia do jogo: snapshot na hora do `POST /tracked-games` (nome, ano, capa). Mud
 
 ### Endpoints
 
-- `GET /games/search?q=` — busca no RAWG, não persiste
+- `GET /games/search?q=` — busca no RAWG (`search_precise` sempre ligado), não persiste. `exact=true` opcional mapeia para `search_exact`
 - `POST /tracked-games` — começa a acompanhar pelo `rawgId`; status opcional (default `PLAYING`)
 - `GET /tracked-games` — lista com status, nota, `totalMinutes`
 - `GET /tracked-games/{id}` — um jogo acompanhado; mesmo JSON do item da lista
@@ -56,6 +56,7 @@ Busca:
 
 ```http
 GET /games/search?q=zelda
+GET /games/search?q=Lies%20Of%20P&exact=true
 ```
 
 ```json

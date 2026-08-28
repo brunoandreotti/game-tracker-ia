@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RawgApiClient {
 
 	@GetMapping("/games")
-	RawgSearchResponseDto searchGames(@RequestParam String search, @RequestParam("key") String apiKey);
+	RawgSearchResponseDto searchGames(
+			@RequestParam("search") String search,
+			@RequestParam("search_precise") boolean searchPrecise,
+			@RequestParam("search_exact") boolean searchExact,
+			@RequestParam("key") String apiKey);
 
 	@GetMapping("/games/{id}")
 	RawgGameDto getGame(@PathVariable long id, @RequestParam("key") String apiKey);

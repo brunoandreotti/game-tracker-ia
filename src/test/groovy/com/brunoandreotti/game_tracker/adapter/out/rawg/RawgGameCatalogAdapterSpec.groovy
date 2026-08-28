@@ -17,11 +17,13 @@ class RawgGameCatalogAdapterSpec extends RawgWireMockIntegrationSpec {
 		given: "RAWG returns a Zelda result with year and cover"
 		wireMock().stubFor(get(urlPathEqualTo("/games"))
 				.withQueryParam("search", equalTo("zelda"))
+				.withQueryParam("search_precise", equalTo("true"))
+				.withQueryParam("search_exact", equalTo("false"))
 				.withQueryParam("key", equalTo("test-key"))
 				.willReturn(okJson('''{"count":1,"results":[{"id":123,"name":"Zelda","released":"2017-03-03","background_image":"https://cover"}]}''')))
 
 		when: "the catalog is searched for zelda"
-		def results = gameCatalogPort.search("zelda")
+		def results = gameCatalogPort.search("zelda", false)
 
 		then: "the result is mapped to a game summary with rawgId, name, year, and coverUrl"
 		results.size() == 1
@@ -38,7 +40,7 @@ class RawgGameCatalogAdapterSpec extends RawgWireMockIntegrationSpec {
 				.willReturn(okJson('''{"count":1,"results":[{"id":456,"name":"No Cover","released":null,"background_image":null}]}''')))
 
 		when: "the catalog is searched for unknown"
-		def results = gameCatalogPort.search("unknown")
+		def results = gameCatalogPort.search("unknown", false)
 
 		then: "year and coverUrl are null"
 		results[0].year() == null
@@ -63,10 +65,28 @@ class RawgGameCatalogAdapterSpec extends RawgWireMockIntegrationSpec {
 				.willReturn(serverError()))
 
 		when: "the catalog is searched for zelda"
-		gameCatalogPort.search("zelda")
+		gameCatalogPort.search("zelda", false)
 
 		then: "CatalogUnavailableException is thrown"
 		thrown(CatalogUnavailableException)
+	}
+
+	def "Given exact search is requested, When the catalog is searched for Lies Of P, Then RAWG is called with search_precise and search_exact"() {
+		given: "RAWG returns an exact Lies Of P result"
+		wireMock().stubFor(get(urlPathEqualTo("/games"))
+				.withQueryParam("search", equalTo("Lies Of P"))
+				.withQueryParam("search_precise", equalTo("true"))
+				.withQueryParam("search_exact", equalTo("true"))
+				.withQueryParam("key", equalTo("test-key"))
+				.willReturn(okJson('''{"count":1,"results":[{"id":605674,"name":"Lies Of P","released":"2023-09-19","background_image":"https://cover"}]}''')))
+
+		when: "the catalog is searched for Lies Of P with exact true"
+		def results = gameCatalogPort.search("Lies Of P", true)
+
+		then: "the result is mapped to a game summary"
+		results.size() == 1
+		results[0].rawgId() == 605674L
+		results[0].name() == "Lies Of P"
 	}
 
 }

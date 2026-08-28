@@ -20,9 +20,10 @@ public class RawgGameCatalogAdapter implements GameCatalogPort {
 	private final RawgProperties rawgProperties;
 
 	@Override
-	public List<GameSummary> search(String query) {
+	public List<GameSummary> search(String query, boolean exact) {
 		try {
-			RawgSearchResponseDto response = rawgApiClient.searchGames(query, rawgProperties.apiKey());
+			RawgSearchResponseDto response =
+					rawgApiClient.searchGames(query, true, exact, rawgProperties.apiKey());
 			if (response.results() == null) {
 				return List.of();
 			}

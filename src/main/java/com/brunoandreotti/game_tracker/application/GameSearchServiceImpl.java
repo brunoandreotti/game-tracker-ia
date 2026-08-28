@@ -15,8 +15,8 @@ public class GameSearchServiceImpl implements GameSearchService {
 	private final GameCatalogPort gameCatalogPort;
 
 	@Override
-	public List<GameSummary> search(String query) {
-		return gameCatalogPort.search(query);
+	public List<GameSummary> search(String query, boolean exact) {
+		return gameCatalogPort.search(query, exact);
 	}
 
 }

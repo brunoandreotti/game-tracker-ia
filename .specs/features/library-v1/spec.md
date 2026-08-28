@@ -48,6 +48,7 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 | Concorrência | Last-write-wins. Sem lock pessimista no v1. | N/A because o uso previsto é um processo local. | n |
 | Expiração / soft delete | DELETE físico. Apagar o jogo acompanhado remove as sessões em cascade. | N/A because product.md já define DELETE como correção de erro. | n |
 | Observabilidade | Só o log padrão do Spring Boot. Sem métricas nem tracing no v1. | N/A because o recorte não pede observabilidade. | n |
+| Busca RAWG precise/exact | Sempre `search_precise=true`. `exact=true` no GET liga `search_exact`; omitido = `false`. | Fuzzy demais (Lies Of P puxava jogos só com a letra P). Exact opcional para título colado. | y |
 | Testes de persistência e HTTP externo | Testcontainers PostgreSQL + WireMock no cliente RAWG. Sem H2. Domínio sem Spring. | Confirmado 2026-08-27 (AD-003). Docker é requisito de `mvn test`. | y |
 | Teste de componente da API | `@SpringBootTest` com serviço e repositório reais. Só o RAWG é WireMock. Sem `@WebMvcTest`. | Confirmado 2026-08-27 (AD-004). | y |
 | Rotas e nomes | HTTP `/tracked-games`. Modelo `TrackedGame`. Pacote `tracking`. | Discussão Guided. `library` não descreve o rastreio. | y |
@@ -73,6 +74,8 @@ Every ambiguity is resolved or recorded here - nothing is left silently unclear.
 3. IF `q` is missing, empty, or only whitespace THEN the system SHALL return HTTP 400 and a JSON body with `status`, `error`, and `message`.
 4. IF RAWG is unavailable during search THEN the system SHALL return HTTP 502 and a JSON body with `status`, `error`, and `message`.
 5. WHEN RAWG returns no matches THEN the system SHALL return HTTP 200 and an empty JSON array.
+6. WHEN the client sends `GET /games/search` without `exact` THEN the system SHALL call RAWG with `search_precise=true` and `search_exact=false`.
+7. WHEN the client sends `GET /games/search` with `exact=true` THEN the system SHALL call RAWG with `search_precise=true` and `search_exact=true`.
 
 **Independent Test**: Call `GET /games/search?q=zelda`, receive a non-empty array with the four fields, then `GET /tracked-games` and see that those games were not added.
 

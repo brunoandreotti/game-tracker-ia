@@ -39,6 +39,42 @@ class GameSearchControllerSpec extends RawgMockMvcIntegrationSpec {
 				.andExpect(jsonPath('$[0].coverUrl').value("https://cover"))
 	}
 
+	def "Given RAWG returns a Zelda result, When GET /games/search is called without exact, Then RAWG is called with search_precise true and search_exact false"() {
+		given: "RAWG returns a Zelda result"
+		wireMock().stubFor(WireMock.get(urlPathEqualTo("/games"))
+				.withQueryParam("search", equalTo("zelda"))
+				.withQueryParam("search_precise", equalTo("true"))
+				.withQueryParam("search_exact", equalTo("false"))
+				.willReturn(okJson('''{"count":1,"results":[{"id":123,"name":"Zelda","released":"2017-03-03","background_image":"https://cover"}]}''')))
+
+		when: "GET /games/search is called with q=zelda and no exact param"
+		mockMvc.perform(get("/games/search").param("q", "zelda"))
+				.andExpect(status().isOk())
+
+		then: "RAWG is called with search_precise true and search_exact false"
+		wireMock().verify(WireMock.getRequestedFor(urlPathEqualTo("/games"))
+				.withQueryParam("search", equalTo("zelda"))
+				.withQueryParam("search_precise", equalTo("true"))
+				.withQueryParam("search_exact", equalTo("false")))
+	}
+
+	def "Given RAWG returns Lies Of P, When GET /games/search is called with exact=true, Then RAWG is called with search_exact true"() {
+		given: "RAWG returns Lies Of P for an exact search"
+		wireMock().stubFor(WireMock.get(urlPathEqualTo("/games"))
+				.withQueryParam("search", equalTo("Lies Of P"))
+				.withQueryParam("search_precise", equalTo("true"))
+				.withQueryParam("search_exact", equalTo("true"))
+				.willReturn(okJson('''{"count":1,"results":[{"id":605674,"name":"Lies Of P","released":"2023-09-19","background_image":"https://cover"}]}''')))
+
+		when: "GET /games/search is called with q=Lies Of P and exact=true"
+		def result = mockMvc.perform(get("/games/search").param("q", "Lies Of P").param("exact", "true"))
+
+		then: "the response is 200 with Lies Of P"
+		result.andExpect(status().isOk())
+				.andExpect(jsonPath('$[0].rawgId').value(605674))
+				.andExpect(jsonPath('$[0].name').value("Lies Of P"))
+	}
+
 	def "Given RAWG returns a Zelda result, When GET /games/search is called with q=zelda, Then no tracked game is persisted"() {
 		given: "RAWG returns a Zelda result"
 		wireMock().stubFor(WireMock.get(urlPathEqualTo("/games"))

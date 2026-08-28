@@ -17,20 +17,32 @@ class GameSearchServiceImplSpec extends Specification {
 		def summaries = [new GameSummary(123L, "Zelda", 2017, "https://cover")]
 
 		when: "the service searches for zelda"
-		def results = service.search("zelda")
+		def results = service.search("zelda", false)
 
 		then: "the summaries from the catalog are returned unchanged"
-		1 * gameCatalogPort.search("zelda") >> summaries
+		1 * gameCatalogPort.search("zelda", false) >> summaries
 		results == summaries
 	}
 
 	def "Given the catalog has no matches, When the service searches for nothing, Then an empty list is returned"() {
 		when: "the service searches for a query with no matches"
-		def results = service.search("nothing")
+		def results = service.search("nothing", false)
 
 		then: "an empty list is returned"
-		1 * gameCatalogPort.search("nothing") >> []
+		1 * gameCatalogPort.search("nothing", false) >> []
 		results.isEmpty()
+	}
+
+	def "Given exact search is requested, When the service searches for Lies Of P, Then the catalog is called with exact true"() {
+		given: "the catalog port will return a Lies Of P summary"
+		def summaries = [new GameSummary(605674L, "Lies Of P", 2023, "https://cover")]
+
+		when: "the service searches for Lies Of P with exact true"
+		def results = service.search("Lies Of P", true)
+
+		then: "the catalog is called with exact true"
+		1 * gameCatalogPort.search("Lies Of P", true) >> summaries
+		results == summaries
 	}
 
 }

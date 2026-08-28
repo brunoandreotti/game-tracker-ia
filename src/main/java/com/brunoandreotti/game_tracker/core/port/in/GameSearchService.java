@@ -6,6 +6,6 @@ import com.brunoandreotti.game_tracker.core.model.GameSummary;
 
 public interface GameSearchService {
 
-	List<GameSummary> search(String query);
+	List<GameSummary> search(String query, boolean exact);
 
 }

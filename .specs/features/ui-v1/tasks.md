@@ -167,9 +167,9 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Types match design.md Data Models
-- [ ] Exported for use by `apiClient` / pages
-- [ ] Gate check passes: `cd frontend && npm run build`
+- [x] Types match design.md Data Models
+- [x] Exported for use by `apiClient` / pages
+- [x] Gate check passes: `cd frontend && npm run build`
 
 **Tests**: none
 **Gate**: build

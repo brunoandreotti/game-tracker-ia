@@ -156,13 +156,14 @@ T2 → T5
 
 **Done when**:
 
-- [ ] Rated games show filled/empty stars (N/5), not `Nota N`
-- [ ] null → Sem nota (no filled stars)
-- [ ] rating 0 → zero filled (not Sem nota)
-- [ ] Vitest covers list cases
+- [x] Rated games show filled/empty stars (N/5), not `Nota N`
+- [x] null → Sem nota (no filled stars)
+- [x] rating 0 → zero filled (not Sem nota)
+- [x] Vitest covers list cases
 
 **Tests**: unit
 **Gate**: quick
+**Status**: ✅ Complete
 
 **Commit**: `feat(ui): show rating as stars on tracked games list`
 

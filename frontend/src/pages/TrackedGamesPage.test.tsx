@@ -33,7 +33,7 @@ describe('TrackedGamesPage', () => {
     expect(screen.getByRole('link', { name: 'Buscar jogos' })).toHaveAttribute('href', '/search')
   })
 
-  it('Given two tracked games, When the page loads, Then it shows names, PT status, ratings, minutes, and detail links', async () => {
+  it('Given two tracked games, When the page loads, Then it shows names, PT status, stars or Sem nota, minutes, and detail links', async () => {
     vi.mocked(gamesApi.listTrackedGames).mockResolvedValue([
       {
         id: 1,
@@ -52,8 +52,18 @@ describe('TrackedGamesPage', () => {
         year: 2021,
         coverUrl: null,
         status: 'COMPLETED',
-        rating: 9,
+        rating: 5,
         totalMinutes: 120,
+      },
+      {
+        id: 3,
+        rawgId: 30,
+        name: 'Game Three',
+        year: 2022,
+        coverUrl: null,
+        status: 'DROPPED',
+        rating: 0,
+        totalMinutes: 10,
       },
     ])
 
@@ -69,10 +79,14 @@ describe('TrackedGamesPage', () => {
 
     expect(screen.getByText('Game One')).toBeInTheDocument()
     expect(screen.getByText('Game Two')).toBeInTheDocument()
+    expect(screen.getByText('Game Three')).toBeInTheDocument()
     expect(screen.getByText(/Jogando/)).toBeInTheDocument()
     expect(screen.getByText(/Zerei/)).toBeInTheDocument()
+    expect(screen.getByText(/Dropado/)).toBeInTheDocument()
     expect(screen.getByText(/Sem nota/)).toBeInTheDocument()
-    expect(screen.getByText(/Nota 9/)).toBeInTheDocument()
+    expect(screen.getByLabelText('Nota 5 de 5')).toHaveTextContent('★★★★★')
+    expect(screen.getByLabelText('Nota 0 de 5')).toHaveTextContent('☆☆☆☆☆')
+    expect(screen.queryByText(/Nota 5/)).not.toBeInTheDocument()
     expect(screen.getByText(/45 min/)).toBeInTheDocument()
     expect(screen.getByText(/2h/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Game One/ })).toHaveAttribute('href', '/games/1')

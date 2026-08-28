@@ -114,9 +114,9 @@ A nota do diário usa escala 1–10, desalinhada do desejo de uma escala curta 0
 | RATE-08 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
 | RATE-09 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
 | RATE-10 | P1: Select numérico 0–5 no detalhe | Execute | ✅ Verified |
-| RATE-11 | P1: Estrelas na listagem | Design | Pending |
-| RATE-12 | P1: Estrelas na listagem | Design | Pending |
-| RATE-13 | P1: Estrelas na listagem | Design | Pending |
+| RATE-11 | P1: Estrelas na listagem | Execute | ✅ Verified |
+| RATE-12 | P1: Estrelas na listagem | Execute | ✅ Verified |
+| RATE-13 | P1: Estrelas na listagem | Execute | ✅ Verified |
 
 **ID format:** `RATE-NN`
 

@@ -8,6 +8,26 @@ import { CoverImage, ErrorMessage, LoadingMessage } from '../components/Feedback
 import { formatMinutes } from '../lib/formatMinutes'
 import { playStatusLabel } from '../lib/playStatus'
 
+function RatingStars({ rating }: { rating: number }) {
+  const filled = '★'.repeat(rating)
+  const empty = '☆'.repeat(5 - rating)
+
+  return (
+    <span className="rating-stars" aria-label={`Nota ${rating} de 5`}>
+      {filled}
+      {empty}
+    </span>
+  )
+}
+
+function ratingLabel(rating: number | null) {
+  if (rating === null) {
+    return 'Sem nota'
+  }
+
+  return <RatingStars rating={rating} />
+}
+
 export function TrackedGamesPage() {
   const [games, setGames] = useState<TrackedGameDto[]>([])
   const [loading, setLoading] = useState(true)
@@ -79,7 +99,7 @@ export function TrackedGamesPage() {
                 <p className="game-list__details">
                   {playStatusLabel(game.status)}
                   {' · '}
-                  {game.rating !== null ? `Nota ${game.rating}` : 'Sem nota'}
+                  {ratingLabel(game.rating)}
                   {' · '}
                   {formatMinutes(game.totalMinutes)}
                 </p>

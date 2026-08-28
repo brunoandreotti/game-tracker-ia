@@ -258,6 +258,11 @@ ol {
   color: var(--color-text-muted);
 }
 
+.rating-stars {
+  color: var(--color-accent, #00c030);
+  letter-spacing: 0.05em;
+}
+
 .empty-state {
   text-align: center;
   padding: var(--space-2xl) var(--space-md);

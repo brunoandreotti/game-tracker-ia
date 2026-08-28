@@ -237,6 +237,8 @@ class TrackedGameControllerSpec extends RawgMockMvcIntegrationSpec {
 		then: "the response is 400"
 		result.andExpect(status().isBadRequest())
 				.andExpect(jsonPath('$.status').value(400))
+				.andExpect(jsonPath('$.error').value("Bad Request"))
+				.andExpect(jsonPath('$.message').exists())
 	}
 
 	def "Given tracked game 1 exists, When DELETE /tracked-games/1 is called, Then the response is 204"() {

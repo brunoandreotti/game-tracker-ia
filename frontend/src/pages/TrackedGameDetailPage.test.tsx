@@ -125,6 +125,42 @@ describe('TrackedGameDetailPage', () => {
     })
   })
 
+  it('Given a loaded game, When the Nota combobox opens, Then options are Sem nota and 0 through 5 only', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('combobox', { name: 'Nota' }))
+
+    for (const optionName of ['Sem nota', '0', '1', '2', '3', '4', '5']) {
+      expect(await screen.findByRole('option', { name: optionName })).toBeInTheDocument()
+    }
+
+    for (const invalidOption of ['6', '7', '8', '9', '10']) {
+      expect(screen.queryByRole('option', { name: invalidOption })).not.toBeInTheDocument()
+    }
+  })
+
+  it('Given a rated game on detail, When the page renders, Then it shows text rating not star glyphs', async () => {
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue({ ...trackedGame, rating: 5 })
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByText(/2017 · Jogando · Nota 5 · 0 min/)).toBeInTheDocument()
+    })
+
+    expect(document.querySelector('.rating-stars')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Nota \d+ de 5/)).not.toBeInTheDocument()
+  })
+
   it('Given rating set to 5, When the user selects 5, Then patchTrackedGame is called and UI shows Nota 5', async () => {
     const user = userEvent.setup()
     vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
@@ -312,6 +348,29 @@ describe('TrackedGameDetailPage', () => {
       expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
     })
     expect(gamesApi.deleteTrackedGame).not.toHaveBeenCalled()
+  })
+
+  it('Given patchTrackedGame fails on rating change, When the user selects a rating, Then error is shown and prior rating remains', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue({ ...trackedGame, rating: 3 })
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+    vi.mocked(gamesApi.patchTrackedGame).mockRejectedValue(
+      new ApiError(400, 'A nota deve estar entre 0 e 5.'),
+    )
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByText(/2017 · Jogando · Nota 3 · 0 min/)).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('combobox', { name: 'Nota' }))
+    await user.click(await screen.findByRole('option', { name: '5' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('A nota deve estar entre 0 e 5.')
+      expect(screen.getByText(/2017 · Jogando · Nota 3 · 0 min/)).toBeInTheDocument()
+    })
   })
 
   it('Given patchTrackedGame fails, When the user changes status, Then error is shown and game name remains', async () => {

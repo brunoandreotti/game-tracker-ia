@@ -11,6 +11,7 @@ import {
   patchTrackedGame,
 } from '../api/gamesApi'
 import type { PlayStatus, SessionDto, TrackedGameDto } from '../api/types'
+import { isValidRating, RATING_VALUES, ratingValidationMessage } from '../lib/ratingBounds'
 import { CoverImage, ErrorMessage, LoadingMessage } from '../components/Feedback'
 import {
   AlertDialog,
@@ -143,8 +144,8 @@ export function TrackedGameDetailPage() {
     }
 
     const rating = Number(ratingValue)
-    if (Number.isNaN(rating) || rating < 0 || rating > 5) {
-      setMutationError('A nota deve ser um número entre 0 e 5.')
+    if (!isValidRating(rating)) {
+      setMutationError(ratingValidationMessage())
       return
     }
 
@@ -312,7 +313,7 @@ export function TrackedGameDetailPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Sem nota</SelectItem>
-                  {Array.from({ length: 6 }, (_, index) => index).map((value) => (
+                  {RATING_VALUES.map((value) => (
                     <SelectItem key={value} value={String(value)}>
                       {value}
                     </SelectItem>

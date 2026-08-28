@@ -7,18 +7,23 @@ export function AppLayout() {
     <div className="app-shell">
       <nav className="app-nav">
         <div className="app-nav__inner">
-          <Link
-            to="/"
-            className={`app-nav__link${pathname === '/' ? ' app-nav__link--active' : ''}`}
-          >
-            Meus jogos
+          <Link to="/" className="app-nav__brand">
+            Game Tracker
           </Link>
-          <Link
-            to="/search"
-            className={`app-nav__link${pathname === '/search' ? ' app-nav__link--active' : ''}`}
-          >
-            Buscar
-          </Link>
+          <div className="app-nav__links">
+            <Link
+              to="/"
+              className={`app-nav__link${pathname === '/' ? ' app-nav__link--active' : ''}`}
+            >
+              Meus jogos
+            </Link>
+            <Link
+              to="/search"
+              className={`app-nav__link${pathname === '/search' ? ' app-nav__link--active' : ''}`}
+            >
+              Buscar
+            </Link>
+          </div>
         </div>
       </nav>
       <main className="app-main">

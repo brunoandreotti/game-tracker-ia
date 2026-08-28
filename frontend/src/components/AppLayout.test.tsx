@@ -17,6 +17,7 @@ describe('AppLayout', () => {
       </MemoryRouter>,
     )
 
+    expect(screen.getByRole('link', { name: 'Game Tracker' })).toHaveAttribute('href', '/')
     expect(screen.getByRole('link', { name: 'Meus jogos' })).toHaveAttribute('href', '/')
     expect(screen.getByRole('link', { name: 'Buscar' })).toHaveAttribute('href', '/search')
   })

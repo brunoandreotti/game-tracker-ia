@@ -118,8 +118,8 @@ T4 -> T5
 
 **Done when**:
 
-- [ ] button, card, input, select, alert-dialog files exist under `components/ui/`
-- [ ] `npm run build` succeeds
+- [x] button, card, input, select, alert-dialog files exist under `components/ui/`
+- [x] `npm run build` succeeds
 
 **Tests**: none
 **Gate**: build

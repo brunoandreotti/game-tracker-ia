@@ -11,7 +11,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 ---
 
 **Design**: `.specs/features/ui-v1/design.md`
-**Status**: Implementing
+**Status**: Done
 
 ---
 
@@ -550,13 +550,13 @@ T14 -> T15
 **What**: Add tests for nav links and CoverImage null/src behavior.
 **Where**: `frontend/src/components/AppLayout.test.tsx`, `frontend/src/components/Feedback.test.tsx`
 **Depends on**: T10, T11
-**Status**: Implementing
+**Status**: Done
 
 **Done when**:
 
-- [ ] AppLayout nav links: Meus jogos → `/`, Buscar → `/search`
-- [ ] CoverImage null src → no img; url src → img with alt
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] AppLayout nav links: Meus jogos → `/`, Buscar → `/search`
+- [x] CoverImage null src → no img; url src → img with alt
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Commit**: `test(ui): cover app nav and null cover image`
 

@@ -71,6 +71,23 @@ describe('TrackedGameDetailPage', () => {
     expect(screen.getByText('Nenhuma sessão registrada.')).toBeInTheDocument()
   })
 
+  it('Given a loaded game with coverUrl, When the page renders, Then it shows the cover image', async () => {
+    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue({
+      ...trackedGame,
+      coverUrl: 'https://example.com/cover.jpg',
+    })
+    vi.mocked(gamesApi.listSessions).mockResolvedValue([])
+
+    renderDetailPage()
+
+    await waitFor(() => {
+      expect(screen.getByRole('img', { name: 'The Legend of Zelda' })).toHaveAttribute(
+        'src',
+        'https://example.com/cover.jpg',
+      )
+    })
+  })
+
   it('Given a loaded game with sessions, When the page renders, Then it shows session rows', async () => {
     vi.mocked(gamesApi.getTrackedGame).mockResolvedValue({ ...trackedGame, totalMinutes: 60 })
     vi.mocked(gamesApi.listSessions).mockResolvedValue([
@@ -180,10 +197,12 @@ describe('TrackedGameDetailPage', () => {
     confirmSpy.mockRestore()
   })
 
-  it('Given confirm accepted, When the user clicks Remover on a session, Then deleteSession is called', async () => {
+  it('Given confirm accepted, When the user clicks Remover on a session, Then deleteSession is called and sessions and total refresh', async () => {
     const user = userEvent.setup()
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true)
-    vi.mocked(gamesApi.getTrackedGame).mockResolvedValue(trackedGame)
+    vi.mocked(gamesApi.getTrackedGame)
+      .mockResolvedValueOnce({ ...trackedGame, totalMinutes: 30 })
+      .mockResolvedValueOnce({ ...trackedGame, totalMinutes: 0 })
     vi.mocked(gamesApi.listSessions)
       .mockResolvedValueOnce([{ id: 10, durationMinutes: 30, playedAt: '2024-06-01' }])
       .mockResolvedValueOnce([])
@@ -192,13 +211,16 @@ describe('TrackedGameDetailPage', () => {
     renderDetailPage()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Remover' })).toBeInTheDocument()
+      expect(screen.getByText(/30 min · 2024-06-01/)).toBeInTheDocument()
+      expect(screen.getByText(/2017 · Jogando · Sem nota · 30 min/)).toBeInTheDocument()
     })
 
     await user.click(screen.getByRole('button', { name: 'Remover' }))
 
     await waitFor(() => {
       expect(gamesApi.deleteSession).toHaveBeenCalledWith(1, 10)
+      expect(screen.getByText('Nenhuma sessão registrada.')).toBeInTheDocument()
+      expect(screen.getByText(/2017 · Jogando · Sem nota · 0 min/)).toBeInTheDocument()
     })
     confirmSpy.mockRestore()
   })

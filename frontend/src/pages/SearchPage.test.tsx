@@ -305,4 +305,72 @@ describe('SearchPage', () => {
       )
     })
   })
+
+  it('Given a 409 on track, When list has no matching rawgId, Then it links to home', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockResolvedValue([
+      {
+        rawgId: 42,
+        name: 'The Legend of Zelda',
+        year: 2017,
+        coverUrl: null,
+      },
+    ])
+    vi.mocked(gamesApi.createTrackedGame).mockRejectedValue(
+      new ApiError(409, 'Jogo já acompanhado'),
+    )
+    vi.mocked(gamesApi.listTrackedGames).mockResolvedValue([])
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Zelda')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Acompanhar' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Acompanhar' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Este jogo já está na sua lista.')
+      expect(screen.getByRole('link', { name: 'Ir para meus jogos' })).toHaveAttribute('href', '/')
+    })
+  })
+
+  it('Given createTrackedGame fails with non-409, When the user tracks, Then it shows the API error message', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockResolvedValue([
+      {
+        rawgId: 42,
+        name: 'The Legend of Zelda',
+        year: 2017,
+        coverUrl: null,
+      },
+    ])
+    vi.mocked(gamesApi.createTrackedGame).mockRejectedValue(new ApiError(500, 'Falha no servidor'))
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Zelda')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Acompanhar' })).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: 'Acompanhar' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Falha no servidor')
+    })
+  })
 })

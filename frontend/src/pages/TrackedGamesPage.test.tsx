@@ -77,6 +77,7 @@ describe('TrackedGamesPage', () => {
     expect(screen.getByText(/2h/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Game One/ })).toHaveAttribute('href', '/games/1')
     expect(screen.getByRole('link', { name: /Game Two/ })).toHaveAttribute('href', '/games/2')
+    expect(gamesApi.listTrackedGames).toHaveBeenCalled()
   })
 
   it('Given listTrackedGames rejects with ApiError, When the page loads, Then it shows the error and no list', async () => {

@@ -562,6 +562,26 @@ T14 -> T15
 
 ---
 
+### T20: Close remaining Verifier AC gaps
+
+**What**: Strengthen session-delete refresh assertions; cover 409→`/`, createTrackedGame non-409 error, list GET called, detail cover when present.
+**Where**: `frontend/src/pages/TrackedGameDetailPage.test.tsx`, `frontend/src/pages/SearchPage.test.tsx`, `frontend/src/pages/TrackedGamesPage.test.tsx`
+**Depends on**: T16, T17, T18
+**Status**: Done
+
+**Done when**:
+
+- [x] Session delete asserts sessions list + totalMinutes refresh
+- [x] 409 without matching rawgId links to `/`
+- [x] Non-409 track error shows API message
+- [x] List happy path asserts `listTrackedGames` called
+- [x] Detail with coverUrl shows img
+- [x] Gate check passes: `cd frontend && npm test`
+
+**Commit**: `test(ui): close session delete and search conflict gaps`
+
+---
+
 ## Phase Execution Map
 
 ```
@@ -576,12 +596,12 @@ Phase 2:  T7 -> T12
 Phase 3:  T12 -> T15
           T13 -> T15
           T14 -> T15
-Phase 4:  T16 -> T17 -> T18 -> T19
+Phase 4:  T16 -> T17 -> T18 -> T19 -> T20
 ```
 
-Preferred inline order: T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19.
+Preferred inline order: T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20.
 
-**Batches at Execute (~7 tasks):** Phase 1 (T1–T6) | Phase 2 (T7–T12) | Phase 3 (T13–T15) | Phase 4 (T16–T19). Offer sub-agents; do not auto-spawn. **No code until Bruno allows Execute.**
+**Batches at Execute (~7 tasks):** Phase 1 (T1–T6) | Phase 2 (T7–T12) | Phase 3 (T13–T15) | Phase 4 (T16–T20). Offer sub-agents; do not auto-spawn.
 ---
 
 ## Task Granularity Check

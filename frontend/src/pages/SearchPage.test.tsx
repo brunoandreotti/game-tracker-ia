@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ApiError } from '../api/apiClient'
 import * as gamesApi from '../api/gamesApi'
+import type { GameSummaryDto } from '../api/types'
 import { SearchPage } from './SearchPage'
 
 const navigateMock = vi.fn()
@@ -79,6 +80,100 @@ describe('SearchPage', () => {
     })
   })
 
+  it('Given search results with coverUrl, When the search completes, Then it shows name, year, and cover image', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockResolvedValue([
+      {
+        rawgId: 1,
+        name: 'Hollow Knight',
+        year: 2017,
+        coverUrl: 'https://example.com/cover.jpg',
+      },
+    ])
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Hollow')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Hollow Knight')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText('2017')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Hollow Knight' })).toHaveAttribute(
+      'src',
+      'https://example.com/cover.jpg',
+    )
+  })
+
+  it('Given an empty results array after search, When the search completes, Then it shows empty message', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockResolvedValue([])
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'xyz')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('Nenhum jogo encontrado.')).toBeInTheDocument()
+    })
+  })
+
+  it('Given searchGames rejects with ApiError, When the user searches, Then it shows the API error message', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockRejectedValue(new ApiError(502, 'RAWG indisponível'))
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Zelda')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('RAWG indisponível')
+    })
+  })
+
+  it('Given a pending searchGames call, When the user searches, Then it shows loading and disables Buscar', async () => {
+    const user = userEvent.setup()
+    let resolveSearch!: (value: GameSummaryDto[]) => void
+    vi.mocked(gamesApi.searchGames).mockReturnValue(
+      new Promise((resolve) => {
+        resolveSearch = resolve
+      }),
+    )
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Zelda')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    expect(screen.getByText('Buscando jogos...')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
+
+    resolveSearch([])
+    await waitFor(() => {
+      expect(screen.queryByText('Buscando jogos...')).not.toBeInTheDocument()
+    })
+  })
+
   it('Given a search result, When the user tracks it, Then it navigates to the game detail', async () => {
     const user = userEvent.setup()
     vi.mocked(gamesApi.searchGames).mockResolvedValue([
@@ -119,6 +214,46 @@ describe('SearchPage', () => {
       expect(gamesApi.createTrackedGame).toHaveBeenCalledWith(42)
       expect(navigateMock).toHaveBeenCalledWith('/games/7')
     })
+  })
+
+  it('Given tracking is in progress, When another result is shown, Then Acompanhar is disabled and shows Acompanhando...', async () => {
+    const user = userEvent.setup()
+    vi.mocked(gamesApi.searchGames).mockResolvedValue([
+      {
+        rawgId: 1,
+        name: 'Game A',
+        year: 2020,
+        coverUrl: null,
+      },
+      {
+        rawgId: 2,
+        name: 'Game B',
+        year: 2021,
+        coverUrl: null,
+      },
+    ])
+    vi.mocked(gamesApi.createTrackedGame).mockReturnValue(new Promise(() => {}))
+
+    render(
+      <MemoryRouter>
+        <SearchPage />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nome do jogo'), 'Game')
+    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('button', { name: 'Acompanhar' })).toHaveLength(2)
+    })
+
+    await user.click(screen.getAllByRole('button', { name: 'Acompanhar' })[0]!)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Acompanhando...' })).toBeInTheDocument()
+    })
+
+    expect(screen.getAllByRole('button', { name: 'Acompanhar' })[0]).toBeDisabled()
   })
 
   it('Given a 409 on track, When list has the game, Then it shows a link to the existing entry', async () => {

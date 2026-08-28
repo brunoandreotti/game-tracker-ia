@@ -507,16 +507,16 @@ T14 -> T15
 **What**: Add tests for results display, empty results, ApiError, loading state, and optional tracking disabled state.
 **Where**: `frontend/src/pages/SearchPage.test.tsx`
 **Depends on**: T13
-**Status**: Implementing
+**Status**: Done
 
 **Done when**:
 
-- [ ] Results show name, year, cover img when coverUrl set
-- [ ] Empty search results show `Nenhum jogo encontrado.`
-- [ ] searchGames ApiError shows API message
-- [ ] Loading shows `Buscando jogos...` and disables Buscar button
-- [ ] Existing empty-query, exact, track nav, 409 tests remain
-- [ ] Gate check passes: `cd frontend && npm test`
+- [x] Results show name, year, cover img when coverUrl set
+- [x] Empty search results show `Nenhum jogo encontrado.`
+- [x] searchGames ApiError shows API message
+- [x] Loading shows `Buscando jogos...` and disables Buscar button
+- [x] Existing empty-query, exact, track nav, 409 tests remain
+- [x] Gate check passes: `cd frontend && npm test`
 
 **Commit**: `test(ui): cover search results empty error loading`
 

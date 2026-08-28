@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 5,
+  "next_id": 9,
   "lessons": [
     {
       "id": "L-001",
@@ -76,6 +76,78 @@
       ],
       "created": "2026-08-28T20:17:54Z",
       "last_seen": "2026-08-28T20:17:54Z"
+    },
+    {
+      "id": "L-005",
+      "key": "surviving_mutant::assert the nota select exposes exactly sem nota plus integers 0 5 not just that individual options respond to clicks",
+      "text": "Assert the Nota Select exposes exactly Sem nota plus integers 0-5, not just that individual options respond to clicks.",
+      "signal": "surviving_mutant",
+      "scope": "frontend/detail",
+      "status": "candidate",
+      "features": [
+        "rating-0-5"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "TrackedGameDetailPage.tsx:315 length:11 (frontend/detail)"
+      ],
+      "created": "2026-08-28T21:41:29Z",
+      "last_seen": "2026-08-28T21:41:29Z"
+    },
+    {
+      "id": "L-006",
+      "key": "ac_gap::add an integration test that inserts a legacy rating above 5 and asserts the flyway clamp migration reads back 5",
+      "text": "Add an integration test that inserts a legacy rating above 5 and asserts the Flyway clamp migration reads back 5.",
+      "signal": "ac_gap",
+      "scope": "db/migration",
+      "status": "candidate",
+      "features": [
+        "rating-0-5"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "RATE-04 (db/migration)"
+      ],
+      "created": "2026-08-28T21:41:29Z",
+      "last_seen": "2026-08-28T21:41:29Z"
+    },
+    {
+      "id": "L-007",
+      "key": "ac_gap::for bean validation 400 responses assert status error and message fields together not status alone",
+      "text": "For Bean Validation 400 responses, assert status, error, and message fields together, not status alone.",
+      "signal": "ac_gap",
+      "scope": "api/validation",
+      "status": "candidate",
+      "features": [
+        "rating-0-5"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "RATE-02 (api/validation)"
+      ],
+      "created": "2026-08-28T21:41:29Z",
+      "last_seen": "2026-08-28T21:41:29Z"
+    },
+    {
+      "id": "L-008",
+      "key": "ac_gap::cover client side rating bounds with a vitest that expects the portuguese 0 5 message and no patch call",
+      "text": "Cover client-side rating bounds with a Vitest that expects the Portuguese 0-5 message and no PATCH call.",
+      "signal": "ac_gap",
+      "scope": "frontend/detail",
+      "status": "candidate",
+      "features": [
+        "rating-0-5"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "RATE-10 (frontend/detail)"
+      ],
+      "created": "2026-08-28T21:41:30Z",
+      "last_seen": "2026-08-28T21:41:30Z"
     }
   ]
 }

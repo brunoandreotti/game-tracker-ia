@@ -38,6 +38,30 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: validation.md:SHAD-09 non-numeric duration (frontend/pages)
 - last seen: 2026-08-28T20:17:54Z
 
+### L-005 - Assert the Nota Select exposes exactly Sem nota plus integers 0-5, not just that individual options respond to clicks.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `frontend/detail` · harmful: 0
+- features: rating-0-5
+- evidence: TrackedGameDetailPage.tsx:315 length:11 (frontend/detail)
+- last seen: 2026-08-28T21:41:29Z
+
+### L-006 - Add an integration test that inserts a legacy rating above 5 and asserts the Flyway clamp migration reads back 5.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `db/migration` · harmful: 0
+- features: rating-0-5
+- evidence: RATE-04 (db/migration)
+- last seen: 2026-08-28T21:41:29Z
+
+### L-007 - For Bean Validation 400 responses, assert status, error, and message fields together, not status alone.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `api/validation` · harmful: 0
+- features: rating-0-5
+- evidence: RATE-02 (api/validation)
+- last seen: 2026-08-28T21:41:29Z
+
+### L-008 - Cover client-side rating bounds with a Vitest that expects the Portuguese 0-5 message and no PATCH call.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `frontend/detail` · harmful: 0
+- features: rating-0-5
+- evidence: RATE-10 (frontend/detail)
+- last seen: 2026-08-28T21:41:30Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.

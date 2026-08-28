@@ -116,11 +116,12 @@
 
 ## Handoff
 
-- **Feature**: rating-0-5 (Execute + Verifier PASS)
-- **Phase / Task**: Done — validation.md PASS
-- **Completed**: T1–T5; gap-fix commit `aa9ee25`; Verifier iteration 2 PASS (13/13 ACs, sensor 3/3)
+- **Feature**: rating-0-5 (done)
+- **Phase / Task**: Execute complete; Verifier PASS
+- **Completed**: T1–T5; fix aa9ee25; validation PASS
 - **In-progress**: none
-- **Next step**: UAT visual (lista estrelas / detalhe Select); restart Spring se DB local precisa V2; optional commit LESSONS if desired
+- **Next step**: UAT visual (lista com estrelas; detalhe Select 0–5); restart API for Flyway V2 if local DB already running
 - **Blockers**: none
-- **Uncommitted files**: `.specs/features/rating-0-5/validation.md`; possibly `.specs/LESSONS.md` / `lessons.json` from prior FAIL distill
+- **Uncommitted files**: none after this commit
 - **Branch**: main
+

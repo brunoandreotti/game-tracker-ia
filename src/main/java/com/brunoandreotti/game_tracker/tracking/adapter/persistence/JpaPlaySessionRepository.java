@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JpaPlaySessionRepository implements PlaySessionRepository {
 
-	private final PlaySessionSpringDataRepository springDataRepository;
+	private final PlaySessionSpringDataRepository playSessionSpringDataRepository;
 
 	private final TrackedGameSpringDataRepository trackedGameSpringDataRepository;
 
@@ -27,19 +27,19 @@ public class JpaPlaySessionRepository implements PlaySessionRepository {
 
 		PlaySessionEntity entity = playSession.id() == null
 				? new PlaySessionEntity()
-				: springDataRepository.findByIdAndTrackedGameId(playSession.id(), playSession.trackedGameId())
+				: playSessionSpringDataRepository.findByIdAndTrackedGameId(playSession.id(), playSession.trackedGameId())
 						.orElseGet(PlaySessionEntity::new);
 
 		entity.setTrackedGame(trackedGame);
 		entity.setDurationMinutes(playSession.durationMinutes());
 		entity.setPlayedAt(playSession.playedAt());
-		return mapToDomain(springDataRepository.save(entity));
+		return mapToDomain(playSessionSpringDataRepository.save(entity));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<PlaySession> listByTrackedGameId(long trackedGameId) {
-		return springDataRepository.findByTrackedGame_IdOrderByPlayedAtDescIdDesc(trackedGameId)
+		return playSessionSpringDataRepository.findByTrackedGame_IdOrderByPlayedAtDescIdDesc(trackedGameId)
 				.stream()
 				.map(this::mapToDomain)
 				.toList();
@@ -48,20 +48,20 @@ public class JpaPlaySessionRepository implements PlaySessionRepository {
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<PlaySession> findByIdAndTrackedGameId(long sessionId, long trackedGameId) {
-		return springDataRepository.findByIdAndTrackedGameId(sessionId, trackedGameId).map(this::mapToDomain);
+		return playSessionSpringDataRepository.findByIdAndTrackedGameId(sessionId, trackedGameId).map(this::mapToDomain);
 	}
 
 	@Override
 	@Transactional
 	public void delete(PlaySession playSession) {
-		springDataRepository.findByIdAndTrackedGameId(playSession.id(), playSession.trackedGameId())
-				.ifPresent(springDataRepository::delete);
+		playSessionSpringDataRepository.findByIdAndTrackedGameId(playSession.id(), playSession.trackedGameId())
+				.ifPresent(playSessionSpringDataRepository::delete);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public int sumDurationByTrackedGameId(long trackedGameId) {
-		return springDataRepository.sumDurationByTrackedGameId(trackedGameId);
+		return playSessionSpringDataRepository.sumDurationByTrackedGameId(trackedGameId);
 	}
 
 	private PlaySession mapToDomain(PlaySessionEntity entity) {

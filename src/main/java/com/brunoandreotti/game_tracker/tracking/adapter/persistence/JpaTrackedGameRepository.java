@@ -15,45 +15,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JpaTrackedGameRepository implements TrackedGameRepository {
 
-	private final TrackedGameSpringDataRepository springDataRepository;
+	private final TrackedGameSpringDataRepository trackedGameSpringDataRepository;
 
 	@Override
 	@Transactional
 	public TrackedGame save(TrackedGame trackedGame) {
-		if (trackedGame.id() == null && springDataRepository.existsByRawgId(trackedGame.rawgId())) {
+		if (trackedGame.id() == null && trackedGameSpringDataRepository.existsByRawgId(trackedGame.rawgId())) {
 			throw new DuplicateRawgIdException(trackedGame.rawgId());
 		}
 
 		TrackedGameEntity entity = trackedGame.id() == null
 				? new TrackedGameEntity()
-				: springDataRepository.findById(trackedGame.id()).orElseGet(TrackedGameEntity::new);
+				: trackedGameSpringDataRepository.findById(trackedGame.id()).orElseGet(TrackedGameEntity::new);
 
 		mapToEntity(trackedGame, entity);
-		return mapToDomain(springDataRepository.save(entity));
+		return mapToDomain(trackedGameSpringDataRepository.save(entity));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<TrackedGame> findById(long id) {
-		return springDataRepository.findById(id).map(this::mapToDomain);
+		return trackedGameSpringDataRepository.findById(id).map(this::mapToDomain);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<TrackedGame> findAllOrderByIdAsc() {
-		return springDataRepository.findAllByOrderByIdAsc().stream().map(this::mapToDomain).toList();
+		return trackedGameSpringDataRepository.findAllByOrderByIdAsc().stream().map(this::mapToDomain).toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public boolean existsByRawgId(long rawgId) {
-		return springDataRepository.existsByRawgId(rawgId);
+		return trackedGameSpringDataRepository.existsByRawgId(rawgId);
 	}
 
 	@Override
 	@Transactional
 	public void deleteById(long id) {
-		springDataRepository.deleteById(id);
+		trackedGameSpringDataRepository.deleteById(id);
 	}
 
 	private TrackedGame mapToDomain(TrackedGameEntity entity) {

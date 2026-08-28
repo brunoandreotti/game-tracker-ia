@@ -140,10 +140,10 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] `CorsConfig` registers allowed origins from config
-- [ ] `application.yaml` has `app.cors.allowed-origins`
-- [ ] Gate check passes: `mvn -q package`
-- [ ] Existing tests still green (no silent deletions)
+- [x] `CorsConfig` registers allowed origins from config
+- [x] `application.yaml` has `app.cors.allowed-origins`
+- [x] Gate check passes: `mvn -q package`
+- [x] Existing tests still green (no silent deletions)
 
 **Tests**: none
 **Gate**: build

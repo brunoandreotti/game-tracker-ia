@@ -41,19 +41,21 @@ src/test/groovy/com/brunoandreotti/game_tracker/ # Spock specs (`*Spec.groovy`)
 src/test/java/com/brunoandreotti/game_tracker/   # JUnit (`contextLoads`) and shared test config
 ```
 
-Keep the root package as-is. Pacotes planos por camada (AD-008): `controller`, `service`, `repository`, `client`, `model`, `entity`, `dto`, `exception`, `config`. `model` não importa Spring nem JPA.
+Keep the root package as-is. Zonas hexagonais (AD-009). `core/` não importa Spring, JPA nem Feign.
 
 ```
 src/main/java/com/brunoandreotti/game_tracker/
-  controller/    # REST
-  service/       # casos de uso (*Service + *ServiceImpl)
-  repository/    # portas de persistência + Jpa*Repository + Spring Data interno
-  client/        # GameCatalogPort + RawgGameCatalogAdapter + RawgApiClient
-  model/         # domínio puro (TrackedGame, PlaySession, PlayStatus)
-  entity/        # entidades JPA
-  dto/           # DTOs HTTP e integração
-  exception/     # exceções de negócio
-  config/        # Spring config + ApiExceptionHandler
+  core/
+    model/              domínio + GameSummary
+    exception/
+    port/in/            *Service (portas de entrada)
+    port/out/           *Repository, GameCatalogPort (portas de saída)
+  application/          *ServiceImpl (use cases)
+  adapter/
+    in/web/             Controllers + DTOs HTTP
+    out/persistence/    Entity, Jpa*, Spring Data
+    out/rawg/           RawgGameCatalogAdapter, Feign, DTOs RAWG
+  config/               Spring wiring + ApiExceptionHandler
 ```
 
 ## Conventions

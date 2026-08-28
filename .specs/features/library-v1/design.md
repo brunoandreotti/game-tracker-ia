@@ -12,7 +12,7 @@ Hexagonal prática (AD-005). O miolo é Java puro. Spring liga as bordas nas por
 
 Camadas, sempre nesta ordem: controller → serviço (interface) → repositório/catálogo (interface). O Spring injeta a classe.
 
-Pacotes planos por camada (AD-008): `controller`, `service`, `repository`, `client`, `model`, `entity`, `dto`, `exception`, `config`.
+Zonas hexagonais (AD-009): `core/` (model, exception, port/in, port/out), `application/` (*ServiceImpl), `adapter/in/web`, `adapter/out/persistence`, `adapter/out/rawg`, `config/`.
 
 Duas portas de banco: `TrackedGameRepository` e `PlaySessionRepository`. Catálogo: `GameCatalog` (AD-001). Schema Flyway, sem `ddl-auto` (AD-002).
 
@@ -98,7 +98,7 @@ flowchart TD
 ### GameCatalog (porta)
 
 - **Purpose**: Buscar e buscar por id do RAWG, sem tipos HTTP.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/client/GameCatalogPort.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/out/GameCatalogPort.java`
 - **Interfaces**:
   - `search(q: String): List<GameSummary>` — LIB-01, LIB-05
   - `getByRawgId(rawgId: long): GameSummary` — lança `GameNotFoundException` se o RAWG não tiver o id
@@ -112,7 +112,7 @@ flowchart TD
 ### RawgGameCatalog (adapter)
 
 - **Purpose**: Chama o RAWG. Mapeia JSON para `GameSummary`. Falha de transporte vira `CatalogUnavailableException`.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/client/RawgGameCatalogAdapter.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/adapter/out/rawg/RawgGameCatalogAdapter.java`
 - **Interfaces**: implements `GameCatalog`
 - **Dependencies**: cliente HTTP (Feign ou `@HttpExchange` grupo `rawg`), `RAWG_API_KEY`
 - **Reuses**: docs Boot 4.1.0 HTTP services ou OpenFeign se o BOM passar
@@ -122,7 +122,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### GameSearchService / GameSearchServiceImpl
 
 - **Purpose**: Caso de uso da busca. Não grava. O controller não chama `GameCatalog`.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/service/GameSearchService.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/in/GameSearchService.java`
 - **Interfaces**: `search(q: String): List<GameSummary>`
 - **Dependencies**: `GameCatalog`
 - **Reuses**: none
@@ -130,7 +130,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### GameSearchController
 
 - **Purpose**: `GET /games/search`
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/controller/GameSearchController.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/adapter/in/web/GameSearchController.java`
 - **Interfaces**: `search(q: String): List<GameSearchResponse>` — 200
 - **Dependencies**: `GameSearchService`
 - **Reuses**: `@RestController`, injeção no construtor
@@ -140,7 +140,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### TrackedGame (domínio)
 
 - **Purpose**: O jogo que você acompanha. Sem anotações JPA.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/model/TrackedGame.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/model/TrackedGame.java`
 - **Interfaces**: dados: `id`, `rawgId`, `name`, `year`, `coverUrl`, `status` (`PlayStatus`), `rating`
 - **Dependencies**: `PlayStatus`
 - **Reuses**: none
@@ -150,7 +150,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### PlaySession (domínio)
 
 - **Purpose**: Uma sessão de jogo.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/model/PlaySession.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/model/PlaySession.java`
 - **Interfaces**: `id`, `trackedGameId`, `durationMinutes`, `playedAt`
 - **Dependencies**: none
 - **Reuses**: none
@@ -158,7 +158,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### TrackedGameRepository (porta)
 
 - **Purpose**: Gravar e ler `TrackedGame`.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/repository/TrackedGameRepository.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/out/TrackedGameRepository.java`
 - **Interfaces**: save, findById, findAllOrderByIdAsc, existsByRawgId, deleteById
 - **Dependencies**: domínio `TrackedGame`
 - **Reuses**: none
@@ -166,7 +166,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### PlaySessionRepository (porta)
 
 - **Purpose**: Gravar, listar e apagar sessões de um jogo acompanhado.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/repository/PlaySessionRepository.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/out/PlaySessionRepository.java`
 - **Interfaces**: save, listByTrackedGameId ordered (`playedAt` desc, `id` desc), findByIdAndTrackedGameId, delete, sumDurationByTrackedGameId
 - **Dependencies**: domínio `PlaySession`
 - **Reuses**: none
@@ -174,7 +174,7 @@ Chave nunca no git. Placeholder no YAML, env `RAWG_API_KEY`.
 ### JpaTrackedGameRepository / JpaPlaySessionRepository (adapters)
 
 - **Purpose**: Implementam as portas. Copiam domínio ↔ `TrackedGameEntity` / `PlaySessionEntity`. Spring Data fica interno ao pacote `adapter.persistence`.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/repository/`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/adapter/out/persistence/`
 - **Interfaces**: implements as portas de application
 - **Dependencies**: Flyway, PostgreSQL
 - **Reuses**: `spring-boot-starter-data-jpa`
@@ -184,7 +184,7 @@ Delete do jogo acompanhado apaga sessões (FK `ON DELETE CASCADE` + cascade JPA)
 ### TrackedGameService / TrackedGameServiceImpl
 
 - **Purpose**: Add, ler, patch, delete. Snapshot do catálogo no add. `rawgId` único. Status livre (LIB-20).
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/service/TrackedGameService.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/in/TrackedGameService.java`
 - **Interfaces**:
   - `add(rawgId, status?): TrackedGameResponse` — 201; 409 duplicata; 404 id RAWG; 502 catálogo fora
   - `list(): List<TrackedGameResponse>` — por id asc
@@ -197,7 +197,7 @@ Delete do jogo acompanhado apaga sessões (FK `ON DELETE CASCADE` + cascade JPA)
 ### TrackedGameController
 
 - **Purpose**: `/tracked-games`
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/controller/TrackedGameController.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/adapter/in/web/TrackedGameController.java`
 - **Interfaces**: POST, GET coleção, GET item, PATCH, DELETE
 - **Dependencies**: `TrackedGameService`
 - **Reuses**: `@RestController`
@@ -205,7 +205,7 @@ Delete do jogo acompanhado apaga sessões (FK `ON DELETE CASCADE` + cascade JPA)
 ### SessionService / SessionServiceImpl
 
 - **Purpose**: Criar, listar, apagar sessões. `totalMinutes` via a mesma SUM.
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/service/SessionService.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/core/port/in/SessionService.java`
 - **Interfaces**:
   - `add(trackedGameId, durationMinutes, playedAt?): SessionResponse` — default `playedAt` = `LocalDate.now()` do servidor
   - `list(trackedGameId): List<SessionResponse>` — `playedAt` desc, `id` desc
@@ -218,7 +218,7 @@ Sessão vale em qualquer `PlayStatus`.
 ### SessionController
 
 - **Purpose**: `/tracked-games/{id}/sessions`
-- **Location**: `src/main/java/com/brunoandreotti/game_tracker/controller/SessionController.java`
+- **Location**: `src/main/java/com/brunoandreotti/game_tracker/adapter/in/web/SessionController.java`
 - **Interfaces**: POST, GET, DELETE
 - **Dependencies**: `SessionService`
 - **Reuses**: `@RestController`
@@ -228,7 +228,7 @@ Sessão vale em qualquer `PlayStatus`.
 - **Purpose**: Mapeia falhas para `{ status, error, message }`.
 - **Location**: `src/main/java/com/brunoandreotti/game_tracker/config/ApiExceptionHandler.java`
 - **Interfaces**: `@RestControllerAdvice` para 400, 404, 409, 502
-- **Dependencies**: exceções de `client` e `model`
+- **Dependencies**: exceções de `core/exception`
 - **Reuses**: Spring MVC
 
 ### Persistence (schema)

@@ -8,5 +8,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',
     passWithNoTests: true,
+    env: {
+      VITE_API_URL: 'http://localhost:8080',
+    },
   },
 })

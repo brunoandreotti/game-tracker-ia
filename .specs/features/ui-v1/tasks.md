@@ -193,12 +193,12 @@ T14 -> T15
 
 **Done when**:
 
-- [ ] Happy path returns parsed JSON
-- [ ] Non-OK with body uses `message`
-- [ ] Network error → PT message about API unreachable
-- [ ] Unit tests cover happy, body error, network failure
-- [ ] Gate check passes: `cd frontend && npm test`
-- [ ] Test count: at least 3 tests pass (no silent deletions)
+- [x] Happy path returns parsed JSON
+- [x] Non-OK with body uses `message`
+- [x] Network error → PT message about API unreachable
+- [x] Unit tests cover happy, body error, network failure
+- [x] Gate check passes: `cd frontend && npm test`
+- [x] Test count: at least 3 tests pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: quick

@@ -12,6 +12,22 @@ import {
 } from '../api/gamesApi'
 import type { PlayStatus, SessionDto, TrackedGameDto } from '../api/types'
 import { CoverImage, ErrorMessage, LoadingMessage } from '../components/Feedback'
+import { Button } from '../components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card'
+import { Input } from '../components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select'
 import { formatMinutes } from '../lib/formatMinutes'
 import { PLAY_STATUS_OPTIONS, playStatusLabel } from '../lib/playStatus'
 
@@ -110,7 +126,7 @@ export function TrackedGameDetailPage() {
 
     setMutationError(null)
 
-    if (ratingValue === '') {
+    if (ratingValue === '' || ratingValue === 'none') {
       return
     }
 
@@ -200,9 +216,9 @@ export function TrackedGameDetailPage() {
       <div className="empty-state">
         <p>Jogo não encontrado.</p>
         <div className="empty-state__cta">
-          <Link to="/" className="btn">
-            Voltar para meus jogos
-          </Link>
+          <Button asChild>
+            <Link to="/">Voltar para meus jogos</Link>
+          </Button>
         </div>
       </div>
     )
@@ -213,16 +229,16 @@ export function TrackedGameDetailPage() {
   }
 
   return (
-    <section>
+    <section className="detail-page">
       <p className="detail-back">
         <Link to="/">← Voltar para meus jogos</Link>
       </p>
 
-      <div className="detail-header">
-        <CoverImage src={game.coverUrl} alt={game.name} width={80} height={112} />
+      <header className="detail-header">
+        <CoverImage src={game.coverUrl} alt={game.name} width={96} height={134} />
         <div className="detail-meta">
           <h1>{game.name}</h1>
-          <p className="game-list__details">
+          <p className="detail-meta__stats">
             {game.year !== null ? game.year : 'Ano desconhecido'}
             {' · '}
             {playStatusLabel(game.status)}
@@ -232,99 +248,144 @@ export function TrackedGameDetailPage() {
             {formatMinutes(game.totalMinutes)}
           </p>
         </div>
-      </div>
+      </header>
 
       {mutationError && <ErrorMessage message={mutationError} />}
 
-      <div className="detail-section">
-        <h2>Status e nota</h2>
-        <div className="detail-controls">
-          <label>
-            Status
-            <select
-              value={game.status}
-              onChange={(event) => void handleStatusChange(event.target.value as PlayStatus)}
-            >
-              {PLAY_STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+      <Card>
+        <CardHeader className="border-b">
+          <CardTitle>Progresso</CardTitle>
+          <CardDescription>Atualize status e nota deste jogo.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-muted-foreground text-xs font-bold tracking-wide uppercase">
+                Status
+              </span>
+              <Select
+                value={game.status}
+                onValueChange={(value) => {
+                  if (value) {
+                    void handleStatusChange(value as PlayStatus)
+                  }
+                }}
+              >
+                <SelectTrigger aria-label="Status" className="w-full">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PLAY_STATUS_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-muted-foreground text-xs font-bold tracking-wide uppercase">
+                Nota
+              </span>
+              <Select
+                value={game.rating !== null ? String(game.rating) : 'none'}
+                onValueChange={(value) => {
+                  if (value) {
+                    void handleRatingChange(value)
+                  }
+                }}
+              >
+                <SelectTrigger aria-label="Nota" className="w-full">
+                  <SelectValue placeholder="Sem nota" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Sem nota</SelectItem>
+                  {Array.from({ length: 10 }, (_, index) => index + 1).map((value) => (
+                    <SelectItem key={value} value={String(value)}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="border-b">
+          <CardTitle>Sessões</CardTitle>
+          <CardDescription>Registre quanto tempo jogou e quando.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-6">
+          <form
+            className="grid items-end gap-4 sm:grid-cols-[1fr_1fr_auto]"
+            onSubmit={handleCreateSession}
+          >
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="session-duration"
+                className="text-muted-foreground text-xs font-bold tracking-wide uppercase"
+              >
+                Duração (min)
+              </label>
+              <Input
+                id="session-duration"
+                type="number"
+                value={durationMinutes}
+                onChange={(event) => setDurationMinutes(event.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label
+                htmlFor="session-date"
+                className="text-muted-foreground text-xs font-bold tracking-wide uppercase"
+              >
+                Data (opcional)
+              </label>
+              <Input
+                id="session-date"
+                type="date"
+                value={playedAt}
+                onChange={(event) => setPlayedAt(event.target.value)}
+              />
+            </div>
+
+            <Button type="submit">Registrar sessão</Button>
+          </form>
+
+          {sessionValidationError && <ErrorMessage message={sessionValidationError} />}
+
+          {sessions.length === 0 ? (
+            <p className="text-muted-foreground text-sm">Nenhuma sessão registrada.</p>
+          ) : (
+            <ul className="session-list">
+              {sessions.map((session) => (
+                <li key={session.id} className="session-item">
+                  <span>
+                    {formatMinutes(session.durationMinutes)} · {session.playedAt}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => void handleDeleteSession(session.id)}
+                  >
+                    Remover
+                  </Button>
+                </li>
               ))}
-            </select>
-          </label>
+            </ul>
+          )}
+        </CardContent>
+      </Card>
 
-          <label>
-            Nota
-            <select
-              value={game.rating ?? ''}
-              onChange={(event) => void handleRatingChange(event.target.value)}
-            >
-              <option value="">Sem nota</option>
-              {Array.from({ length: 10 }, (_, index) => index + 1).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      </div>
-
-      <div className="detail-section">
-        <h2>Sessões</h2>
-
-        <form className="detail-controls" onSubmit={handleCreateSession}>
-          <label>
-            Duração (min)
-            <input
-              type="number"
-              value={durationMinutes}
-              onChange={(event) => setDurationMinutes(event.target.value)}
-            />
-          </label>
-
-          <label>
-            Data (opcional)
-            <input
-              type="date"
-              value={playedAt}
-              onChange={(event) => setPlayedAt(event.target.value)}
-            />
-          </label>
-
-          <button type="submit" className="btn">
-            Registrar sessão
-          </button>
-        </form>
-
-        {sessionValidationError && <ErrorMessage message={sessionValidationError} />}
-
-        {sessions.length === 0 ? (
-          <p className="search-empty">Nenhuma sessão registrada.</p>
-        ) : (
-          <ul className="session-list">
-            {sessions.map((session) => (
-              <li key={session.id} className="session-item">
-                <span>
-                  {formatMinutes(session.durationMinutes)} · {session.playedAt}
-                </span>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => void handleDeleteSession(session.id)}
-                >
-                  Remover
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="detail-section">
-        <button type="button" className="btn btn-danger" onClick={() => void handleDeleteGame()}>
+      <div className="detail-danger">
+        <Button type="button" variant="destructive" onClick={() => void handleDeleteGame()}>
           Remover jogo
-        </button>
+        </Button>
       </div>
     </section>
   )

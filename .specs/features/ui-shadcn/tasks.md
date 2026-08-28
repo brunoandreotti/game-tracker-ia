@@ -145,10 +145,10 @@ T4 -> T5
 
 **Done when**:
 
-- [ ] Progresso/Sessões rendered in Cards
-- [ ] Status/rating Select trigger PATCH + UI refresh (tested)
-- [ ] Session create >0 works; ≤0 shows PT validation without API (tested)
-- [ ] Gate: `npm test` green
+- [x] Progresso/Sessões rendered in Cards
+- [x] Status/rating Select trigger PATCH + UI refresh (tested)
+- [x] Session create >0 works; ≤0 shows PT validation without API (tested)
+- [x] Gate: `npm test` green
 
 **Tests**: unit
 **Gate**: full

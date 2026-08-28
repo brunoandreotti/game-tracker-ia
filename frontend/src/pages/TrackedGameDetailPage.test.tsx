@@ -116,7 +116,8 @@ describe('TrackedGameDetailPage', () => {
       expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
     })
 
-    await user.selectOptions(screen.getByLabelText('Status'), 'COMPLETED')
+    await user.click(screen.getByRole('combobox', { name: 'Status' }))
+    await user.click(await screen.findByRole('option', { name: 'Zerei' }))
 
     await waitFor(() => {
       expect(gamesApi.patchTrackedGame).toHaveBeenCalledWith(1, { status: 'COMPLETED' })
@@ -139,7 +140,8 @@ describe('TrackedGameDetailPage', () => {
       expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
     })
 
-    await user.selectOptions(screen.getByLabelText('Nota'), '9')
+    await user.click(screen.getByRole('combobox', { name: 'Nota' }))
+    await user.click(await screen.findByRole('option', { name: '9' }))
 
     await waitFor(() => {
       expect(gamesApi.patchTrackedGame).toHaveBeenCalledWith(1, { rating: 9 })
@@ -262,7 +264,8 @@ describe('TrackedGameDetailPage', () => {
       expect(screen.getByRole('heading', { name: 'The Legend of Zelda' })).toBeInTheDocument()
     })
 
-    await user.selectOptions(screen.getByLabelText('Status'), 'COMPLETED')
+    await user.click(screen.getByRole('combobox', { name: 'Status' }))
+    await user.click(await screen.findByRole('option', { name: 'Zerei' }))
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent('Falha ao atualizar status')

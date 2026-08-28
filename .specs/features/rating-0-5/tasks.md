@@ -6,7 +6,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 
 **Design**: skipped (no new architecture; bounds + UI display only)
 **Spec**: `.specs/features/rating-0-5/spec.md`
-**Status**: Approved (Bruno: continue TLC flow)
+**Status**: Done
 
 ---
 
@@ -184,10 +184,11 @@ T2 → T5
 
 **Done when**:
 
-- [ ] Body uses `"rating": 5`
+- [x] Body uses `"rating": 5`
 
 **Tests**: none
 **Gate**: build (`mvn -q -DskipTests compile` smoke OK; no UI)
+**Status**: ✅ Complete
 
 **Commit**: `chore(bruno): use rating 5 in patch sample`
 

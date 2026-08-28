@@ -1,15 +1,14 @@
 # Ainda em aberto
 
-API library-v1 e UI v1 (happy path + dark AD-012) em código. Próximo estudo de UI: **shadcn + Tailwind** (AD-013). Brief em [product.md](product.md) e [stack.md](stack.md).
+API library-v1 e UI v1 + shadcn detalhe em código. Próxima feature planejada: **nota 0–5 + estrelas na lista** ([rating-0-5](../.specs/features/rating-0-5/spec.md), AD-014) — spec escrita; **código só com permissão explícita**.
 
 ## Na implementação (não precisa cravar agora)
 
-- Versões finas Tailwind/shadcn no dia do setup (Context7).
-- Quão longe migrar CSS global vs deixar coexistir na 1ª leva.
-- Detalhe de packing CORS se houver mais de uma origem além de `5173`.
+- Visual exato das estrelas (Unicode vs SVG) — agent discretion na Execute.
+- Constraint SQL CHECK na migration se couber limpo.
 
 ## Processo
 
-- UI v1: implementada + validation PASS; polish dark feito.
-- shadcn (AD-013): decidido; **código só com permissão explícita**.
+- UI v1 / ui-shadcn: validation PASS.
+- rating-0-5: Specify pronto (aguardando confirm); Design/Tasks/Execute em seguida.
 - Não mover backend para `api/` neste passo.

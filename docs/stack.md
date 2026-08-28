@@ -36,7 +36,7 @@ Nada disto está no código ainda. Versões finas se cravam na implementação, 
 
 - **Spring Data JPA** (`spring-boot-starter-data-jpa`) — confirmado no Boot 4.x via Context7. Driver Postgres já está no `pom`.
 - Schema: **Flyway** no v1. Sem Hibernate `ddl-auto` no jeito oficial (Compose + migrações).
-- Validação: **`spring-boot-starter-validation`** nos DTOs (`q` não vazio, nota 1–10, `durationMinutes` > 0).
+- Validação: **`spring-boot-starter-validation`** nos DTOs (`q` não vazio, nota **0–5**, `durationMinutes` > 0).
 
 ## Frontend (UI v1)
 

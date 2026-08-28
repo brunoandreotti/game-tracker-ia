@@ -106,13 +106,21 @@
 - **Date**: 2026-08-28
 - **Status**: active
 
+### AD-014
+- **Decision**: Nota do diário é inteiro **0–5** (opcional: `null` = sem nota). UI: Select numérico no detalhe; **estrelas só na listagem** `/`. Migração: valores > 5 clampam para 5. `PATCH` com `rating: null` continua no-op (sem desavaliar).
+- **Reason**: Bruno pediu escala curta e estrelas na lista; confirmou recomendação C + clamp (2026-08-28).
+- **Trade-off**: Quebra escala 1–10 (library-v1 / demos com nota 9); `0` ≠ `null` (zero é nota válida).
+- **Scope**: API validation + Flyway, `docs/product.md` / `docs/stack.md`, detalhe Select, lista `/`, specs `rating-0-5`
+- **Date**: 2026-08-28
+- **Status**: active
+
 ## Handoff
 
-- **Feature**: ui-shadcn (done) / ui-v1 (done)
-- **Phase / Task**: Leftover polish + docs committed
-- **Completed**: Dark chrome (`8ab0a6b`); specs/STATE/docs/lessons (`8853af3`); ui-shadcn Verifier PASS
-- **In-progress**: none
-- **Next step**: UAT visual; optional migrate list/search to shadcn; decide on `bruno/api rawg.bru`
+- **Feature**: rating-0-5
+- **Phase / Task**: Tasks approved; Execute starting at T1
+- **Completed**: Specify + context; AD-014; docs; tasks.md (5 tasks, Design skipped)
+- **In-progress**: T1 Flyway clamp
+- **Next step**: Execute T1→T5 inline; Verifier after T5
 - **Blockers**: none
-- **Uncommitted files**: `bruno/api rawg.bru` only (left out)
+- **Uncommitted files**: rating-0-5 specs/tasks, docs, STATE
 - **Branch**: main

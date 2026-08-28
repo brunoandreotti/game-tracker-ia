@@ -18,7 +18,7 @@ Três conceitos:
 
 **Status:** `WANT_TO_PLAY` / `PLAYING` / `COMPLETED` / `DROPPED`. Qualquer um dos quatro pode ser gravado a partir de qualquer status atual (POST e PATCH). Sem máquina de estados.
 
-**Nota:** inteiro 1–10, opcional até avaliar.
+**Nota:** inteiro **0–5**, opcional até avaliar (`null` = sem nota). Escala antiga 1–10 supersedida (AD-014).
 
 **Sessão:** `durationMinutes` + `playedAt`.
 
@@ -34,9 +34,9 @@ SPA em [`frontend/`](../frontend/) (React + Vite + TypeScript). Consome a API lo
 
 | Rota | Papel |
 |---|---|
-| `/` | Lista de jogos acompanhados |
+| `/` | Lista de jogos acompanhados (nota em estrelas) |
 | `/search` | Busca RAWG + acompanhar |
-| `/games/:id` | Detalhe: status, nota, sessões (criar/apagar), apagar acompanhamento |
+| `/games/:id` | Detalhe: status, nota (Select 0–5), sessões (criar/apagar), apagar acompanhamento |
 
 Happy path na UI: buscar → acompanhar → lista → detalhe → sessões → nota/status. Spec: [`.specs/features/ui-v1`](../.specs/features/ui-v1/spec.md).
 
@@ -94,7 +94,7 @@ Jogo acompanhado — create `201`; get by id / list / patch `200`:
 
 - `POST /tracked-games`: `{ "rawgId": 123, "status": "PLAYING" }` — `status` opcional.
 - `GET /tracked-games/{id}`: o mesmo objeto; `404` se o id não existir.
-- `PATCH /tracked-games/{id}`: `{ "status"?: "...", "rating"?: 9 }` — pelo menos um campo. `rating: null` **não** limpa nota no v1 (sem “desavaliar”).
+- `PATCH /tracked-games/{id}`: `{ "status"?: "...", "rating"?: 5 }` — pelo menos um campo. `rating` válido: **0–5**. `rating: null` **não** limpa nota no v1 (sem “desavaliar”).
 - `POST /tracked-games/{id}/sessions`: `{ "durationMinutes": 90, "playedAt": "2026-08-27" }` — `playedAt` opcional = hoje. Create `201`.
 - `GET /tracked-games/{id}/sessions`: `[{ "id": 1, "durationMinutes": 90, "playedAt": "2026-08-27" }]`.
 - `DELETE` de jogo acompanhado ou sessão: `204` sem body.
@@ -105,7 +105,7 @@ Corpo: `{ "status", "error", "message" }` (sem RFC 7807 no v1).
 
 | HTTP | Quando |
 |---|---|
-| 400 | Validação: `q` vazio, nota fora de 1–10, `durationMinutes` ≤ 0, PATCH sem campos, status inválido |
+| 400 | Validação: `q` vazio, nota fora de 0–5, `durationMinutes` ≤ 0, PATCH sem campos, status inválido |
 | 404 | Jogo acompanhado ou sessão inexistente; `rawgId` não existe no RAWG no `POST /tracked-games` |
 | 409 | `rawgId` já está sendo acompanhado |
 | 502 / 503 | RAWG indisponível na busca ou no add |
@@ -130,6 +130,6 @@ Corpo: `{ "status", "error", "message" }` (sem RFC 7807 no v1).
 
 ## Pronto quando
 
-**API v1:** buscar “Zelda” no RAWG → acompanhar como `PLAYING` → duas sessões (90 min + 60 min) → listar com **`totalMinutes`: 150** (2h30) → nota 9 e status `COMPLETED`.
+**API v1:** buscar “Zelda” no RAWG → acompanhar como `PLAYING` → duas sessões (90 min + 60 min) → listar com **`totalMinutes`: 150** (2h30) → nota **5** e status `COMPLETED`.
 
 **UI v1:** o mesmo demo só pela interface em `frontend/`.

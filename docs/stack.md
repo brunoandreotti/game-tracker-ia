@@ -25,6 +25,18 @@ Nada disto está no código ainda. Versões finas se cravam na implementação, 
 - No dia a dia: `mvn spring-boot:run` contra o Postgres do Compose (ciclo mais curto que rebuild de imagem).
 - RAWG **não** entra no Compose (API externa). Chave só no env (`RAWG_API_KEY` ou equivalente).
 
+## Local secrets
+
+- Copy `.env.example` → `.env` (gitignored) and set `RAWG_API_KEY`. Never put the key in YAML or commit `.env`.
+- Spring Boot reads OS env / placeholders (`${RAWG_API_KEY}`); it does **not** load `.env` by itself.
+- Compose substitutes from root `.env`. Cursor Debug uses `.vscode/launch.json` (`envFile`). Terminal: `.\scripts\run-local.ps1` (or the VS Code task “spring-boot:run (with .env)”).
+
+## Local secrets
+
+- Copy `.env.example` → `.env` (gitignored). Set `RAWG_API_KEY`. Never put the key in YAML or commit `.env`.
+- Compose reads root `.env` automatically. Cursor Debug uses `.vscode/launch.json` (`envFile`). Terminal: `.\scripts\run-local.ps1` (loads `.env`, then `mvn spring-boot:run`).
+- Spring Boot does **not** load `.env` by itself — only OS/process env (and Compose/IDE/script that inject it).
+
 ## Cliente HTTP: Feign (OpenFeign)
 
 - **OpenFeign** (`@EnableFeignClients`, `@FeignClient`) para search + getById do RAWG.
@@ -48,9 +60,15 @@ Nada disto está no código ainda. Versões finas se cravam na implementação, 
 - Spec: [`.specs/features/ui-v1`](../.specs/features/ui-v1/spec.md).
 - Código do front só quando Bruno pedir para implementar / evoluir.
 
+## Auth (auth-v1, planejada)
+
+Spec: [`.specs/features/auth-v1`](../.specs/features/auth-v1/spec.md). Sem senha; Google + OTP por e-mail; sessão observável (cookie vs Bearer é Design). Secrets Google no `.env` (como `RAWG_API_KEY`). Mailpit no Compose para ler o código no local. Flyway: usuário + `user_id` em `tracked_game`, unique `(user_id, rawg_id)`. Detalhe fino na Design, com Context7 (Boot 4.1.1 / Security). Código só no Execute.
+
+Depois do Execute: guia de estudo do backend em [`docs/study/auth-v1-backend.md`](study/auth-v1-backend.md) (fluxo, motivo, classes, teoria). Sem esse arquivo até existir implementação.
+
 ## Fora até alguém pedir
 
-Security, OpenAPI, Redis, Next.js, kits tipo antd/MUI (shadcn escolhido em vez deles).
+OpenAPI, Redis, Next.js, kits tipo antd/MUI (shadcn escolhido em vez deles).
 
 ## Context7
 

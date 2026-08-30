@@ -114,14 +114,38 @@
 - **Date**: 2026-08-28
 - **Status**: active
 
+### AD-015
+- **Decision**: Sessão autenticada é cookie de `HttpSession` servlet (HttpOnly, `SameSite=Lax`, 7 dias ou logout), não Bearer JWT. A SPA em `localhost:5173` envia o cookie para a API em `localhost:8080` com CORS `credentials`.
+- **Reason**: Spring Security `oauth2Login` (Google) já persiste sessão. OTP grava o mesmo `SecurityContext`. F5 reenvia o cookie sem `localStorage`. Um mecanismo só para os dois logins.
+- **Trade-off**: CORS e CSRF ficam mais rígidos que um header `Authorization`. JWT no front seria mais simples no `fetch`, mas duplicaria o fluxo Google e exporia o token ao JS.
+- **Scope**: `config/SecurityConfig`, `AuthController`, `frontend/src/api/apiClient.ts`, `CorsConfig`
+- **Date**: 2026-08-30
+- **Status**: active
+
+### AD-016
+- **Decision**: Jogos acompanhados pertencem a um `user_id`. Unique passa a ser `(user_id, rawg_id)`. Linhas pré-auth não são atribuídas a ninguém (`user_id` null) e a API nunca as devolve.
+- **Reason**: Sem dono, login seria só um portão na frente de um diário compartilhado. Spec de isolamento (404 no id alheio, 409 só no próprio `rawgId`).
+- **Trade-off**: Schema e todos os serviços de diário mudam. Dados locais atuais ficam órfãos (estudo; sem migração).
+- **Scope**: Flyway V3, `TrackedGame` / `TrackedGameEntity` / `TrackedGameRepository`, `TrackedGameService`, `SessionService`, specs HTTP de diário
+- **Date**: 2026-08-30
+- **Status**: active
+
+### AD-017
+- **Decision**: Autenticação e sessão usam Spring Security servlet (`SecurityFilterChain`, `oauth2Login`, logout), não filtros HTTP caseiros nem um Authorization Server próprio.
+- **Reason**: Paths e sessão Google estão documentados no Security 7. OTP só precisa gravar o contexto na mesma sessão. Core continua sem tipos de Security (AD-009).
+- **Trade-off**: Superfície maior (CSRF, CORS no filter chain, starters novos) contra um `Filter` mínimo. Redis / Spring Authorization Server continuam fora.
+- **Scope**: `config/`, `pom.xml` (`spring-boot-starter-security`, `spring-boot-starter-security-oauth2-client`), adapter web de auth
+- **Date**: 2026-08-30
+- **Status**: active
+
 ## Handoff
 
-- **Feature**: rating-0-5 (done)
-- **Phase / Task**: Execute complete; Verifier PASS
-- **Completed**: T1–T5; fix aa9ee25; validation PASS
+- **Feature**: auth-v1 (`.specs/features/auth-v1/`)
+- **Phase / Task**: Specify + Design + Tasks done; Execute not started
+- **Completed**: Spec confirmed; design.md + tasks.md drafted (T1–T35); AD-015/016/017 appended
 - **In-progress**: none
-- **Next step**: UAT visual (lista com estrelas; detalhe Select 0–5); restart API for Flyway V2 if local DB already running
-- **Blockers**: none
-- **Uncommitted files**: none after this commit
+- **Next step**: In a new session: load tlc-spec-driven + Handoff; Bruno approves tasks if still Draft, then say “implementar” / Execute from T1. Prefer phase-batch sub-agents (~35 tasks → ~5 batches). Last task T35 writes `docs/study/auth-v1-backend.md`. Do not code until explicit Execute.
+- **Blockers**: none (tasks Status still Draft until Bruno approves in Execute session)
+- **Uncommitted files**: none after this commit (auth-v1 planning + local .env/run helpers)
 - **Branch**: main
 

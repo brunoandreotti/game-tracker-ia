@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "GameTrackerApplication",
+      "request": "launch",
+      "mainClass": "com.brunoandreotti.game_tracker.GameTrackerApplication",
+      "projectName": "game-tracker",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

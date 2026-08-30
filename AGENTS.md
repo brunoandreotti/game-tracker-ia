@@ -32,6 +32,8 @@ mvn spring-boot:run
 mvn -q package
 ```
 
+Local secrets: copy `.env.example` → `.env` and set `RAWG_API_KEY` (never commit `.env`). For run with env loaded: `.\scripts\run-local.ps1`, or Cursor Debug (`envFile` in `.vscode/launch.json`). Compose also reads root `.env`.
+
 UI (após existir `frontend/`):
 
 ```bash
